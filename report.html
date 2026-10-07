@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>스케줄 제보 · 김윤식 박시우</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="head">
+  <div class="head-in">
+    <div class="bar">
+      <div class="month"><h1 style="font-size:1.5rem;min-width:0"><b>제보</b></h1></div>
+      <nav class="nav" aria-label="페이지">
+        <a href="index.html">스케줄</a>
+        <a href="report.html" aria-current="page">제보</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="report">
+  <h2>두 배우의 스케줄을<br><b>알고 계신가요?</b></h2>
+  <p class="lead">확인한 일정이나 정정이 필요한 내용을 남겨주세요. 확인 후 스케줄 페이지에 반영됩니다. 로그인 없이 익명으로 보낼 수 있어요.</p>
+
+  <form id="f" novalidate>
+    <fieldset class="field">
+      <legend>배우</legend>
+      <div class="who">
+        <label><input type="radio" name="actor" value="김윤식" checked><span class="s">🩵 김윤식</span></label>
+        <label><input type="radio" name="actor" value="박시우"><span class="l">💜 박시우</span></label>
+        <label><input type="radio" name="actor" value="두 배우 모두"><span class="m">🩵💜 함께</span></label>
+      </div>
+    </fieldset>
+
+    <div class="row">
+      <div class="field"><label for="date">날짜 <span class="opt">(선택)</span></label><input type="date" id="date" name="date"></div>
+      <div class="field"><label for="time">시간 <span class="opt">(선택)</span></label><input type="text" id="time" name="time" placeholder="예: 저녁 7시"></div>
+    </div>
+
+    <div class="field">
+      <label for="body">제보 내용</label>
+      <textarea id="body" name="message" required placeholder="어떤 일정인지, 장소와 함께 적어주세요."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="src">링크 <span class="opt">(선택)</span></label>
+      <input type="url" id="src" name="link" inputmode="url" placeholder="https://  공식 계정 게시물, 예매처 등">
+    </div>
+
+    <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="send" id="send" type="submit">제보 보내기</button>
+    <p class="msg" id="msg" role="status"></p>
+  </form>
+</main>
+
+<script src="assets/data.js"></script>
+<script>
+(function(){
+  var f = document.getElementById('f'), msg = document.getElementById('msg'), btn = document.getElementById('send');
+  function say(t, c){ msg.textContent = t; msg.className = 'msg ' + (c||''); }
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!f.message.value.trim()){ say('제보 내용을 입력해주세요.', 'err'); f.message.focus(); return; }
+    if(f._gotcha.value) return;
+    var lk = f.link.value.trim();
+    if(lk && !/^https?:\/\/\S+$/i.test(lk)){ say('링크는 http:// 또는 https:// 로 시작해야 해요.', 'err'); f.link.focus(); return; }
+    var url = (window.SITE||{}).reportEndpoint || '';
+    if(/YOUR_FORM_ID/.test(url) || !url){ say('제보 받을 주소가 아직 설정되지 않았어요. (README 참고)', 'err'); return; }
+    btn.disabled = true; say('보내는 중…');
+    fetch(url, {method:'POST', body:new FormData(f), headers:{'Accept':'application/json'}})
+      .then(function(r){ if(!r.ok) throw 0; f.reset(); say('제보가 접수됐어요. 고맙습니다 💜', 'ok'); })
+      .catch(function(){ say('전송에 실패했어요. 잠시 후 다시 시도해주세요.', 'err'); })
+      .then(function(){ btn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

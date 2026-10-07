@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>김윤식 · 박시우 스케줄</title>
+<meta name="description" content="김윤식, 박시우 배우의 월별 스케줄">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="head" id="head">
+  <div class="head-in">
+    <div class="bar">
+      <div class="month">
+        <button class="step" id="prev" aria-label="이전 달">‹</button>
+        <h1 id="title" aria-live="polite"></h1>
+        <button class="step" id="next" aria-label="다음 달">›</button>
+      </div>
+      <nav class="nav" aria-label="페이지">
+        <a href="index.html" aria-current="page">스케줄</a>
+        <a href="report.html">제보</a>
+      </nav>
+    </div>
+    <div class="cols" aria-hidden="true">
+      <span class="c-date">날짜</span>
+      <span class="c-a">🩵 김윤식 배우</span>
+      <span class="c-b">💜 박시우 배우</span>
+    </div>
+  </div>
+</header>
+
+<main id="list"></main>
+
+<script src="assets/data.js"></script>
+<script>
+(function(){
+  var WEEK = ['일','월','화','수','목','금','토'];
+  var $ = function(id){return document.getElementById(id)};
+  var head = $('head'), list = $('list');
+  var pad = function(n){return String(n).padStart(2,'0')};
+  var now = new Date();
+  var todayStr = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+  var cur = (location.hash.match(/^#(\d{4})-(\d{2})$/) ? location.hash.slice(1) : todayStr.slice(0,7));
+
+  function shift(ym, d){
+    var y = +ym.slice(0,4), m = +ym.slice(5,7) - 1 + d;
+    return new Date(y, m, 1).getFullYear()+'-'+pad(new Date(y, m, 1).getMonth()+1);
+  }
+  function byTime(a,b){
+    if(!a.time && !b.time) return 0;
+    if(!a.time) return 1;
+    if(!b.time) return -1;
+    return a.time < b.time ? -1 : a.time > b.time ? 1 : 0;
+  }
+  function el(tag, cls, text){
+    var e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(text != null) e.textContent = text;
+    return e;
+  }
+  function item(s){
+    var f = document.createDocumentFragment();
+    f.appendChild(el('span', 'time' + (s.time ? '' : ' tbd'), s.time || '시간 미정'));
+    var t = el('span', 'title');
+    if(/^https?:\/\//i.test(s.link || '')){
+      var a = el('a', null, s.title);
+      a.href = s.link; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      t.appendChild(a);
+    } else { t.textContent = s.title; }
+    f.appendChild(t);
+    if(s.place) f.appendChild(el('span', 'place', s.place));
+    return f;
+  }
+
+  function render(){
+    var y = +cur.slice(0,4), m = +cur.slice(5,7);
+    $('title').innerHTML = y + '. <b>' + pad(m) + '</b>';
+    document.title = y + '년 ' + m + '월 · 김윤식 박시우 스케줄';
+    list.innerHTML = '';
+    var days = new Date(y, m, 0).getDate();
+    var data = (window.SCHEDULE || []).filter(function(s){return s.date.slice(0,7) === cur});
+
+    for(var d = 1; d <= days; d++){
+      var ds = cur + '-' + pad(d);
+      var wd = new Date(y, m-1, d).getDay();
+      var A = data.filter(function(s){return s.date===ds && s.actor==='yoonsik'}).sort(byTime);
+      var B = data.filter(function(s){return s.date===ds && s.actor==='siwoo'}).sort(byTime);
+      var n = Math.max(A.length, B.length, 1);
+
+      var day = el('section', 'day' + (wd===0?' sun':'') + (wd===6?' sat':'') +
+                  (ds===todayStr?' today':'') + (A.length+B.length===0?' blank':''));
+      day.id = 'd' + d;
+
+      var date = el('div', 'd');
+      date.style.gridRow = '1 / span ' + n;
+      date.appendChild(el('span', 'n', d));
+      date.appendChild(el('span', 'w', WEEK[wd]));
+      day.appendChild(date);
+
+      for(var r = 0; r < n; r++){
+        [[A,'a'],[B,'b']].forEach(function(p){
+          var s = p[0][r];
+          var c = el('div', 'cell ' + p[1] + (s ? '' : ' empty') + (r===0?' first':'') + (r===n-1?' last':''));
+          if(s) c.appendChild(item(s));
+          day.appendChild(c);
+        });
+      }
+      list.appendChild(day);
+    }
+    if(!data.length){
+      var none = el('p', 'none', '이 달에 등록된 스케줄이 없어요.');
+      list.insertBefore(none, list.firstChild);
+    }
+  }
+
+  function setHeadH(){
+    document.documentElement.style.setProperty('--head-h', head.offsetHeight + 'px');
+  }
+  function go(ym, scrollToday){
+    cur = ym; history.replaceState(null, '', '#' + ym);
+    render(); setHeadH();
+    var t = scrollToday && document.querySelector('.day.today');
+    if(t) t.scrollIntoView({block:'start'}); else window.scrollTo(0,0);
+  }
+
+  $('prev').onclick = function(){ go(shift(cur,-1)) };
+  $('next').onclick = function(){ go(shift(cur, 1)) };
+  window.addEventListener('resize', setHeadH);
+  window.addEventListener('hashchange', function(){
+    var h = location.hash.slice(1);
+    if(/^\d{4}-\d{2}$/.test(h) && h !== cur) go(h);
+  });
+  render(); setHeadH();
+  var t = document.querySelector('.day.today'); if(t) t.scrollIntoView({block:'start'});
+})();
+</script>
+</body>
+</html>
