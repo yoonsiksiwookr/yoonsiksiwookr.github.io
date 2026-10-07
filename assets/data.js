@@ -23,7 +23,7 @@ window.SCHEDULE = [
  { date: "2026-10-08", actor: "siwoo", time: "21:00", title: "SEROVA 예능 더블컬렉션 영상 방송", place: "", link: "" },
  { date: "2026-10-05", actor: "yoonsik", time: "11:00", title: "SEROVA 신제품 콘셉트 영상 공개", place: "", link: "" },
  { date: "2026-10-05", actor: "siwoo", time: "11:00", title: "SEROVA 신제품 콘셉트 영상 공개", place: "", link: "" },
- { date: "2026-10-08", actor: "yoonsik", time: "11:00", title: "SEROVA 신제품 KV 공개, 판메 시작", place: "", link: "" },
+ { date: "2026-10-08", actor: "yoonsik", time: "11:00", title: "SEROVA 신제품 KV 공개, 판매 시작", place: "", link: "" },
  { date: "2026-10-08", actor: "siwoo", time: "11:00", title: "SEROVA 신제품 KV 공개, 판매 시작", place: "", link: "" },
 
 
