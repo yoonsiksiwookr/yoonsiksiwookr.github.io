@@ -17,4 +17,6 @@ window.SITE = {
 
 window.SCHEDULE = [
   // 여기에 일정을 추가하세요.
+ { date: "2026-10-18", actor: "yoonsik", time: "14:00", title: "마카오 2nd 팬미", place: "", link: "https://x.com/studio_oak_kr/status/2100091665772167580?s=20" },
+ { date: "2026-10-18", actor: "siwoo",   time: "14:00", title: "마카오 2nd 팬미", place: "", link: "https://x.com/studio_oak_kr/status/2100091665772167580?s=20" },
 ];
