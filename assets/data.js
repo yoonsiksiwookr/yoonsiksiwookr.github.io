@@ -25,6 +25,6 @@ window.SCHEDULE = [
  { date: "2026-10-05", actor: "siwoo", time: "11:00", title: "SEROVA 신제품 콘셉트 영상 공개", place: "", link: "" },
  { date: "2026-10-08", actor: "yoonsik", time: "11:00", title: "SEROVA 신제품 KV 공개, 판매 시작", place: "", link: "" },
  { date: "2026-10-08", actor: "siwoo", time: "11:00", title: "SEROVA 신제품 KV 공개, 판매 시작", place: "", link: "" },
-
+ { date: "2026-10-08", actor: "yoonsik", time: "20:30", title: "LEECN 라이브방송", place: "", link: "" },
 
 ];
