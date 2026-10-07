@@ -12,7 +12,7 @@
    ============================================================ */
 window.SITE = {
   // 제보 받을 곳 (README 참고): Formspree 주소로 바꿔주세요.
-  reportEndpoint: "https://formspree.io/f/YOUR_FORM_ID"
+  reportEndpoint: "https://formspree.io/f/xjygygap"
 };
 
 window.SCHEDULE = [
