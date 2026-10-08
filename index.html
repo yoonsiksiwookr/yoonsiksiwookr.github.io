@@ -61,7 +61,7 @@
   /* 제보 데이터 → 화면용 일정 (두 배우 모두 → 두 개) */
   function fromRemote(r){
     var t = parseTime(r.time);
-    var base = {date:r.date, time:t, timeText: t ? '' : String(r.time||''), title:r.title, place:'', link:r.link};
+    var base = {date:r.date, time:t, timeText: t ? '' : String(r.time||''), title:r.title, place:String(r.place||''), link:r.link};
     var who = r.actor === 'both' ? ['yoonsik','siwoo'] : [r.actor];
     return who.filter(function(a){return a==='yoonsik'||a==='siwoo'}).map(function(a){
       var o = Object.assign({}, base); o.actor = a; return o;
@@ -123,7 +123,24 @@
       items.slice().sort(byTime).forEach(function(s){
         var k = s.time || ''; if(keys.indexOf(k) < 0) keys.push(k);
       });
-      var n = Math.max(keys.length, 1);
+      /* 행 만들기: 두 배우의 같은 시간·같은 제목 일정은 하나(공동)로 합친다 */
+      var rowsDef = [];
+      keys.forEach(function(k){
+        var A = items.filter(function(s){return s.actor==='yoonsik' && (s.time||'')===k});
+        var B = items.filter(function(s){return s.actor==='siwoo' && (s.time||'')===k});
+        var joint = [];
+        A = A.filter(function(a){
+          var i = B.findIndex(function(b){return String(b.title).trim() === String(a.title).trim()});
+          if(i < 0) return true;
+          var b = B.splice(i, 1)[0];
+          joint.push({date:a.date, time:a.time, timeText:a.timeText||b.timeText, title:a.title,
+                      place:a.place||b.place, link:a.link||b.link});
+          return false;
+        });
+        if(joint.length) rowsDef.push({j:joint});
+        if(A.length || B.length) rowsDef.push({a:A, b:B});
+      });
+      var n = Math.max(rowsDef.length, 1);
 
       var day = el('section', 'day' + (wd===0?' sun':'') + (wd===6?' sat':'') +
                   (ds===todayStr?' today':'') + (items.length===0?' blank':''));
@@ -135,22 +152,22 @@
       date.appendChild(el('span', 'w', WEEK[wd]));
       day.appendChild(date);
 
-      /* 배우별로 행마다 일정 모으기 */
-      var cols = [['yoonsik','a'],['siwoo','b']].map(function(p){
-        var rows = [];
-        for(var r = 0; r < n; r++){
-          var k = keys[r];
-          rows.push(k === undefined ? [] : items.filter(function(s){return s.actor===p[0] && (s.time||'')===k}));
-        }
-        return {cls:p[1], rows:rows};
-      });
       for(var r = 0; r < n; r++){
-        cols.forEach(function(col){
-          var its = col.rows[r];
-          /* 일정이 없는 칸은 색 없이 비움. 위·아래 칸이 비어 있으면 모서리를 둥글게 */
-          var first = !(r > 0 && col.rows[r-1].length);
-          var last  = !(r < n-1 && col.rows[r+1].length);
-          var c = el('div', 'cell ' + col.cls + (its.length ? '' : ' empty') + (first?' first':'') + (last?' last':''));
+        var rd = rowsDef[r];
+        if(rd && rd.j){
+          /* 공동 일정: 두 열을 가로로 합쳐 가운데 정렬 + 그라데이션 */
+          var prevJ = r > 0 && rowsDef[r-1].j, nextJ = r < n-1 && rowsDef[r+1].j;
+          var jc = el('div', 'cell j' + (prevJ?'':' first') + (nextJ?'':' last') +
+                      (r > 0 && !prevJ ? ' gt' : '') + (r < n-1 && !nextJ ? ' gb' : ''));
+          rd.j.forEach(function(s, i){ jc.appendChild(item(s, i > 0 && (s.time||'') !== '')); });
+          day.appendChild(jc);
+          continue;
+        }
+        [['a','a'],['b','b']].forEach(function(p){
+          var its = rd ? rd[p[0]] : [];
+          var prevF = r > 0 && !rowsDef[r-1].j && rowsDef[r-1][p[0]].length;
+          var nextF = r < n-1 && !rowsDef[r+1].j && rowsDef[r+1][p[0]].length;
+          var c = el('div', 'cell ' + p[1] + (its.length ? '' : ' empty') + (prevF?'':' first') + (nextF?'':' last'));
           its.forEach(function(s, i){ c.appendChild(item(s, i > 0 && (s.time||'') !== '')); });
           day.appendChild(c);
         });
