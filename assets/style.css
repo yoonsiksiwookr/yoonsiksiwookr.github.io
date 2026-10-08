@@ -47,7 +47,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nav a:hover{color:var(--ink)}
 
 .cols,.day{
-  display:grid;grid-template-columns:var(--date-w) 1fr 1fr;column-gap:.5rem;
+  display:grid;grid-template-columns:var(--date-w) minmax(0,1fr) minmax(0,1fr);column-gap:.5rem;
 }
 .cols{padding-bottom:.9rem;font-weight:600;font-size:1rem}
 .cols span{padding:.15rem .9rem}
@@ -88,6 +88,7 @@ main{max-width:56rem;margin:0 auto;padding:var(--head-h,9rem) 1.25rem 6rem}
 .time{display:block;font-size:.78rem;font-weight:600;font-variant-numeric:tabular-nums}
 .a .time{color:var(--sky-ink)} .b .time{color:var(--lav-ink)}
 .time.tbd{font-weight:500;color:var(--mute)}
+.title,.place{overflow-wrap:anywhere}
 .title{font-weight:500;font-size:.98rem;word-break:keep-all}
 .title a{
   background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;
