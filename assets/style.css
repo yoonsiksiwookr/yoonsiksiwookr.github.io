@@ -74,6 +74,13 @@ main{max-width:56rem;margin:0 auto;padding:var(--head-h,9rem) 1.25rem 6rem}
 .cell.a{background:var(--sky-soft)}
 .cell.b{background:var(--lav-soft)}
 .cell.empty{padding:0;background:transparent}
+/* 두 배우 공동 일정: 두 열을 합쳐 가운데 정렬, 하늘색→라벤더 그라데이션 */
+.cell.j{grid-column:2 / span 2;text-align:center;background:linear-gradient(90deg,var(--sky-soft),var(--lav-soft))}
+.cell.j.gt{margin-top:.3rem}
+.cell.j.gb{margin-bottom:.3rem}
+.j .time{color:#5769a8}
+.j .title a{text-decoration:underline;text-decoration-color:#b9c4ee;text-decoration-thickness:2px;text-underline-offset:3px;background:none}
+.j .title a:hover{color:#5769a8}
 .day.blank .cell{min-height:0}
 .day.blank .d{padding-top:.55rem;padding-bottom:.55rem}
 .day.blank .d .n{font-size:1.2rem;color:#c3c1d6}
