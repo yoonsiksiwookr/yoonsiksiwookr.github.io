@@ -41,7 +41,7 @@
   var now = new Date();
   var todayStr = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
   var cur = (location.hash.match(/^#(\d{4})-(\d{2})$/) ? location.hash.slice(1) : todayStr.slice(0,7));
-  var remote = [];
+  var remote = [], loaded = false, failed = false, CK = 'schedule-cache-v1';
 
   /* "14시", "저녁 7시", "19:30" → "HH:MM" (못 읽으면 "") */
   function parseTime(raw){
@@ -158,7 +158,10 @@
       list.appendChild(day);
     }
     if(!data.length){
-      list.insertBefore(el('p', 'none', '이 달에 등록된 스케줄이 없어요.'), list.firstChild);
+      var msg = loaded ? '이 달에 등록된 스케줄이 없어요.'
+              : failed ? '일정을 불러오지 못했어요. 잠시 후 새로고침해 주세요.'
+              : '일정을 불러오는 중…';
+      list.insertBefore(el('p', 'none', msg), list.firstChild);
     }
   }
 
@@ -178,16 +181,45 @@
     if(/^\d{4}-\d{2}$/.test(h) && h !== cur) go(h);
   });
 
+  function setRemote(items){
+    remote = [].concat.apply([], items.map(fromRemote));
+    loaded = true;
+  }
+  function rerender(){
+    var y0 = window.scrollY; render(); window.scrollTo(0, y0);
+  }
+
+  var api = (window.SITE || {}).api || '';
+  var hasApi = api && !/YOUR_/.test(api);
+  var cached = false, apiDone = false;
+
+  /* 1) 지난 방문 때 저장해 둔 일정을 먼저 보여준다 */
+  try {
+    var c = JSON.parse(localStorage.getItem(CK) || 'null');
+    if(c && c.items){ setRemote(c.items); cached = true; }
+  } catch(e){}
+  if(!hasApi) loaded = true;
+
   render(); setHeadH();
   var t = document.querySelector('.day.today'); if(t) t.scrollIntoView({block:'start'});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(setHeadH);
 
-  /* 제보 데이터 불러오기 (자동 반영) */
-  var api = (window.SITE || {}).api || '';
-  if(api && !/YOUR_/.test(api)){
-    fetch(api).then(function(r){return r.json()}).then(function(j){
-      remote = [].concat.apply([], (j.items || []).map(fromRemote));
-      var y0 = window.scrollY; render(); window.scrollTo(0, y0);
-    }).catch(function(){});
+  if(hasApi){
+    /* 2) 사이트에 저장된 schedule.json (빠름) — 저장된 일정이 없을 때만 사용 */
+    fetch('schedule.json?t=' + Math.floor(Date.now()/60000))
+      .then(function(r){ if(!r.ok) throw 0; return r.json() })
+      .then(function(j){ if(apiDone || cached) return; setRemote(j.items || []); rerender(); })
+      .catch(function(){});
+
+    /* 3) Google 시트의 최신 내용 — 도착하면 항상 이것으로 맞춘다 */
+    fetch(api).then(function(r){ return r.json() }).then(function(j){
+      apiDone = true;
+      var items = j.items || [];
+      try { localStorage.setItem(CK, JSON.stringify({items: items})); } catch(e){}
+      setRemote(items); rerender();
+    }).catch(function(){
+      if(!loaded){ failed = true; rerender(); }
+    });
   }
 })();
 </script>

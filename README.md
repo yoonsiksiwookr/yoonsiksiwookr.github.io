@@ -5,6 +5,7 @@
 - `report.html` : 일정추가 페이지
 - `assets/data.js` : 사이트 설정(api 주소) + 직접 넣는 스케줄
 - `assets/style.css` : 디자인
+- `schedule.json` : (자동 생성/갱신) 공개된 일정 목록
 - `apps-script/Code.gs` : Google Apps Script 코드 (GitHub에는 올리지 않아도 됨)
 
 ## 동작 방식
@@ -18,6 +19,11 @@
 2. 배포 → 새 배포 → 웹 앱 (실행: 나 / 액세스: 모든 사용자)
 3. 웹 앱 URL을 `assets/data.js`의 `api`에 입력
 4. GitHub 저장소에 `index.html`, `report.html`, `assets/` 업로드
+
+## 빠른 표시를 위한 schedule.json 자동 갱신 (선택, 권장)
+- Apps Script가 일정이 바뀔 때마다 저장소의 `schedule.json`을 자동으로 갱신합니다.
+- GitHub 토큰(이 저장소 Contents: Read and write)을 Apps Script의 스크립트 속성 `GITHUB_TOKEN`에 저장하고, `setupTrigger` 함수를 한 번 실행하세요.
+- `schedule.json`은 저장소 최상위(`index.html`과 같은 위치)에 있어야 합니다.
 
 ## 직접 일정 추가 (선택)
 `assets/data.js`의 `window.SCHEDULE`에 추가:
