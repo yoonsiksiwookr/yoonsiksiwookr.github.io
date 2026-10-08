@@ -32,7 +32,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .bar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 0 .6rem}
 .month{display:flex;align-items:center;gap:.4rem}
 .month h1{
-  font-size:clamp(2rem,6vw,2.8rem);font-weight:200;letter-spacing:-.03em;line-height:1;
+  font-size:clamp(1.35rem,6vw,2.8rem);font-weight:200;letter-spacing:-.03em;line-height:1;
   min-width:6.2ch;text-align:center;white-space:nowrap;
 }
 .month h1 b{font-weight:700}
@@ -41,8 +41,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   display:grid;place-items:center;transition:background .15s,color .15s;
 }
 .step:hover{background:rgba(255,255,255,.7);color:var(--ink)}
-.nav{display:flex;gap:.3rem;font-size:.9rem;font-weight:500;flex-shrink:0}
-.nav a{padding:.45rem .9rem;border-radius:99px;color:var(--mute);white-space:nowrap}
+.nav{display:flex;gap:.3rem;font-size:clamp(.72rem,3.3vw,.9rem);font-weight:500;flex-shrink:0}
+.nav a{padding:.45rem clamp(.5rem,2.4vw,.9rem);border-radius:99px;color:var(--mute);white-space:nowrap}
 .nav a[aria-current]{background:#fff;color:var(--ink)}
 .nav a:hover{color:var(--ink)}
 
