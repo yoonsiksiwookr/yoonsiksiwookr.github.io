@@ -11,7 +11,7 @@
    ============================================================ */
 window.SITE = {
   // Google Apps Script 웹 앱 주소 (README 참고)
-  api: "https://script.google.com/macros/s/AKfycbxLp3V1bcQgqQLmMSEOyaWKa8b2Dlk6wj3mhO1-2e39hPinFNDaMVo97Hw_ddgc3vUEkw/exec"
+  api: "https://script.google.com/macros/s/AKfycbyCu-dXMN2KAprfz126xWjTYrwIFMBxXnOC57iJ4dikp79qXYbKF_CAUO4ljw27AGfPpw/exec"
 };
 
 window.SCHEDULE = [
