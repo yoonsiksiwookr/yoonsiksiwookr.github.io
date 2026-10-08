@@ -18,7 +18,7 @@
       </div>
       <nav class="nav" aria-label="페이지">
         <a href="index.html" aria-current="page">스케줄</a>
-        <a href="report.html">제보</a>
+        <a href="report.html">일정추가</a>
       </nav>
     </div>
     <div class="cols" aria-hidden="true">
@@ -41,10 +41,44 @@
   var now = new Date();
   var todayStr = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
   var cur = (location.hash.match(/^#(\d{4})-(\d{2})$/) ? location.hash.slice(1) : todayStr.slice(0,7));
+  var remote = [];
+
+  /* "14시", "저녁 7시", "19:30" → "HH:MM" (못 읽으면 "") */
+  function parseTime(raw){
+    raw = String(raw||'').trim(); if(!raw) return '';
+    var h, min = 0, m = raw.match(/(\d{1,2})\s*:\s*(\d{2})/);
+    if(m){ h = +m[1]; min = +m[2]; }
+    else {
+      m = raw.match(/(\d{1,2})\s*시(?:\s*(\d{1,2})\s*분)?/);
+      if(!m) return '';
+      h = +m[1]; min = m[2] ? +m[2] : (/반/.test(raw) ? 30 : 0);
+    }
+    if(/오후|저녁|밤|PM|pm/.test(raw) && h < 12) h += 12;
+    if(/오전|새벽|AM|am/.test(raw) && h === 12) h = 0;
+    if(h > 23 || min > 59) return '';
+    return pad(h)+':'+pad(min);
+  }
+  /* 제보 데이터 → 화면용 일정 (두 배우 모두 → 두 개) */
+  function fromRemote(r){
+    var t = parseTime(r.time);
+    var base = {date:r.date, time:t, timeText: t ? '' : String(r.time||''), title:r.title, place:'', link:r.link};
+    var who = r.actor === 'both' ? ['yoonsik','siwoo'] : [r.actor];
+    return who.filter(function(a){return a==='yoonsik'||a==='siwoo'}).map(function(a){
+      var o = Object.assign({}, base); o.actor = a; return o;
+    });
+  }
+  function allData(){
+    var seen = {}, out = [];
+    (window.SCHEDULE || []).concat(remote).forEach(function(s){
+      var k = [s.date,s.actor,s.time,s.title].join('|');
+      if(seen[k]) return; seen[k] = 1; out.push(s);
+    });
+    return out;
+  }
 
   function shift(ym, d){
-    var y = +ym.slice(0,4), m = +ym.slice(5,7) - 1 + d;
-    return new Date(y, m, 1).getFullYear()+'-'+pad(new Date(y, m, 1).getMonth()+1);
+    var y = +ym.slice(0,4), m = +ym.slice(5,7) - 1 + d, dt = new Date(y, m, 1);
+    return dt.getFullYear()+'-'+pad(dt.getMonth()+1);
   }
   function byTime(a,b){
     if(!a.time && !b.time) return 0;
@@ -60,7 +94,7 @@
   }
   function item(s){
     var f = document.createDocumentFragment();
-    f.appendChild(el('span', 'time' + (s.time ? '' : ' tbd'), s.time || '시간 미정'));
+    f.appendChild(el('span', 'time' + (s.time ? '' : ' tbd'), s.time || s.timeText || '시간 미정'));
     var t = el('span', 'title');
     if(/^https?:\/\//i.test(s.link || '')){
       var a = el('a', null, s.title);
@@ -78,7 +112,7 @@
     document.title = y + '년 ' + m + '월 · 김윤식 박시우 스케줄';
     list.innerHTML = '';
     var days = new Date(y, m, 0).getDate();
-    var data = (window.SCHEDULE || []).filter(function(s){return s.date.slice(0,7) === cur});
+    var data = allData().filter(function(s){return String(s.date).slice(0,7) === cur});
 
     for(var d = 1; d <= days; d++){
       var ds = cur + '-' + pad(d);
@@ -108,19 +142,16 @@
       list.appendChild(day);
     }
     if(!data.length){
-      var none = el('p', 'none', '이 달에 등록된 스케줄이 없어요.');
-      list.insertBefore(none, list.firstChild);
+      list.insertBefore(el('p', 'none', '이 달에 등록된 스케줄이 없어요.'), list.firstChild);
     }
   }
 
   function setHeadH(){
     document.documentElement.style.setProperty('--head-h', head.offsetHeight + 'px');
   }
-  function go(ym, scrollToday){
+  function go(ym){
     cur = ym; history.replaceState(null, '', '#' + ym);
-    render(); setHeadH();
-    var t = scrollToday && document.querySelector('.day.today');
-    if(t) t.scrollIntoView({block:'start'}); else window.scrollTo(0,0);
+    render(); setHeadH(); window.scrollTo(0,0);
   }
 
   $('prev').onclick = function(){ go(shift(cur,-1)) };
@@ -130,8 +161,18 @@
     var h = location.hash.slice(1);
     if(/^\d{4}-\d{2}$/.test(h) && h !== cur) go(h);
   });
+
   render(); setHeadH();
   var t = document.querySelector('.day.today'); if(t) t.scrollIntoView({block:'start'});
+
+  /* 제보 데이터 불러오기 (자동 반영) */
+  var api = (window.SITE || {}).api || '';
+  if(api && !/YOUR_/.test(api)){
+    fetch(api).then(function(r){return r.json()}).then(function(j){
+      remote = [].concat.apply([], (j.items || []).map(fromRemote));
+      var y0 = window.scrollY; render(); window.scrollTo(0, y0);
+    }).catch(function(){});
+  }
 })();
 </script>
 </body>
