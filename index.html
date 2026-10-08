@@ -135,12 +135,23 @@
       date.appendChild(el('span', 'w', WEEK[wd]));
       day.appendChild(date);
 
-      for(var r = 0; r < n; r++){
-        [['yoonsik','a'],['siwoo','b']].forEach(function(p){
+      /* 배우별로 행마다 일정 모으기 */
+      var cols = [['yoonsik','a'],['siwoo','b']].map(function(p){
+        var rows = [];
+        for(var r = 0; r < n; r++){
           var k = keys[r];
-          var its = k === undefined ? [] : items.filter(function(s){return s.actor===p[0] && (s.time||'')===k});
-          var c = el('div', 'cell ' + p[1] + (its.length ? '' : ' empty') + (r===0?' first':'') + (r===n-1?' last':''));
-          its.forEach(function(s, i){ c.appendChild(item(s, i > 0 && k !== '')); });
+          rows.push(k === undefined ? [] : items.filter(function(s){return s.actor===p[0] && (s.time||'')===k}));
+        }
+        return {cls:p[1], rows:rows};
+      });
+      for(var r = 0; r < n; r++){
+        cols.forEach(function(col){
+          var its = col.rows[r];
+          /* 일정이 없는 칸은 색 없이 비움. 위·아래 칸이 비어 있으면 모서리를 둥글게 */
+          var first = !(r > 0 && col.rows[r-1].length);
+          var last  = !(r < n-1 && col.rows[r+1].length);
+          var c = el('div', 'cell ' + col.cls + (its.length ? '' : ' empty') + (first?' first':'') + (last?' last':''));
+          its.forEach(function(s, i){ c.appendChild(item(s, i > 0 && (s.time||'') !== '')); });
           day.appendChild(c);
         });
       }
