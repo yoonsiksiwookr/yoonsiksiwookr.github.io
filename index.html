@@ -92,9 +92,9 @@
     if(text != null) e.textContent = text;
     return e;
   }
-  function item(s){
-    var f = document.createDocumentFragment();
-    f.appendChild(el('span', 'time' + (s.time ? '' : ' tbd'), s.time || s.timeText || '시간 미정'));
+  function item(s, hideTime){
+    var f = el('div', 'entry');
+    if(!hideTime) f.appendChild(el('span', 'time' + (s.time ? '' : ' tbd'), s.time || s.timeText || '시간 미정'));
     var t = el('span', 'title');
     if(/^https?:\/\//i.test(s.link || '')){
       var a = el('a', null, s.title);
@@ -117,12 +117,16 @@
     for(var d = 1; d <= days; d++){
       var ds = cur + '-' + pad(d);
       var wd = new Date(y, m-1, d).getDay();
-      var A = data.filter(function(s){return s.date===ds && s.actor==='yoonsik'}).sort(byTime);
-      var B = data.filter(function(s){return s.date===ds && s.actor==='siwoo'}).sort(byTime);
-      var n = Math.max(A.length, B.length, 1);
+      var items = data.filter(function(s){return s.date===ds});
+      /* 같은 시간은 같은 행에 놓는다 (시간 없는 일정은 마지막 행) */
+      var keys = [];
+      items.slice().sort(byTime).forEach(function(s){
+        var k = s.time || ''; if(keys.indexOf(k) < 0) keys.push(k);
+      });
+      var n = Math.max(keys.length, 1);
 
       var day = el('section', 'day' + (wd===0?' sun':'') + (wd===6?' sat':'') +
-                  (ds===todayStr?' today':'') + (A.length+B.length===0?' blank':''));
+                  (ds===todayStr?' today':'') + (items.length===0?' blank':''));
       day.id = 'd' + d;
 
       var date = el('div', 'd');
@@ -132,10 +136,11 @@
       day.appendChild(date);
 
       for(var r = 0; r < n; r++){
-        [[A,'a'],[B,'b']].forEach(function(p){
-          var s = p[0][r];
-          var c = el('div', 'cell ' + p[1] + (s ? '' : ' empty') + (r===0?' first':'') + (r===n-1?' last':''));
-          if(s) c.appendChild(item(s));
+        [['yoonsik','a'],['siwoo','b']].forEach(function(p){
+          var k = keys[r];
+          var its = k === undefined ? [] : items.filter(function(s){return s.actor===p[0] && (s.time||'')===k});
+          var c = el('div', 'cell ' + p[1] + (its.length ? '' : ' empty') + (r===0?' first':'') + (r===n-1?' last':''));
+          its.forEach(function(s, i){ c.appendChild(item(s, i > 0 && k !== '')); });
           day.appendChild(c);
         });
       }
