@@ -33,7 +33,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .month{display:flex;align-items:center;gap:.4rem}
 .month h1{
   font-size:clamp(2rem,6vw,2.8rem);font-weight:200;letter-spacing:-.03em;line-height:1;
-  min-width:6.2ch;text-align:center;
+  min-width:6.2ch;text-align:center;white-space:nowrap;
 }
 .month h1 b{font-weight:700}
 .step{
@@ -41,8 +41,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   display:grid;place-items:center;transition:background .15s,color .15s;
 }
 .step:hover{background:rgba(255,255,255,.7);color:var(--ink)}
-.nav{display:flex;gap:.3rem;font-size:.9rem;font-weight:500}
-.nav a{padding:.45rem .9rem;border-radius:99px;color:var(--mute)}
+.nav{display:flex;gap:.3rem;font-size:.9rem;font-weight:500;flex-shrink:0}
+.nav a{padding:.45rem .9rem;border-radius:99px;color:var(--mute);white-space:nowrap}
 .nav a[aria-current]{background:#fff;color:var(--ink)}
 .nav a:hover{color:var(--ink)}
 
@@ -154,5 +154,23 @@ textarea{min-height:9rem;resize:vertical}
   .cols span{padding:.15rem .6rem}
   .cols{column-gap:.35rem}.day{column-gap:.35rem}
   .row{grid-template-columns:1fr}
+}
+/* 모바일 헤더: 월 표시와 메뉴가 한 줄에 들어가도록 크기 조절 */
+@media (max-width:520px){
+  .head-in{padding:0 1rem}
+  .bar{padding:.8rem 0 .45rem;gap:.4rem}
+  .month{gap:0}
+  .month h1{font-size:1.6rem;min-width:0;padding:0 .15rem}
+  .step{width:1.9rem;height:1.9rem;font-size:1.1rem}
+  .nav{gap:.1rem;font-size:.8rem}
+  .nav a{padding:.4rem .6rem}
+  .cols{font-size:.92rem}
+  main{padding-left:1rem;padding-right:1rem}
+}
+@media (max-width:360px){
+  .month h1{font-size:1.4rem}
+  .nav{font-size:.74rem}
+  .nav a{padding:.38rem .5rem}
+  .cols{font-size:.85rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
