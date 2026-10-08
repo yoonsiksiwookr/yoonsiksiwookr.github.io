@@ -73,7 +73,7 @@ main{max-width:56rem;margin:0 auto;padding:var(--head-h,9rem) 1.25rem 6rem}
 .cell{padding:.9rem .9rem}
 .cell.a{background:var(--sky-soft)}
 .cell.b{background:var(--lav-soft)}
-.cell.empty{padding:0}
+.cell.empty{padding:0;background:transparent}
 .day.blank .cell{min-height:0}
 .day.blank .d{padding-top:.55rem;padding-bottom:.55rem}
 .day.blank .d .n{font-size:1.2rem;color:#c3c1d6}
