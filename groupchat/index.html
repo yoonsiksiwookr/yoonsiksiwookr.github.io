@@ -9,22 +9,23 @@
 <title>김윤식&amp;박시우</title>
 <style>
 :root{
-  --bar:#fff; --bubble-l:#bfe6f8; --bubble-r:#7b72c8;
+  --chat-bg:#fdfcff; /* ← 대화창 배경색: 스케줄 사이트와 같은 배경색 */
+  --bar:linear-gradient(90deg,#eaf5fb,#f1ecfc); --bubble-l:#dcedf8; --bubble-r:#e3dbf8;
   --text:#1b1c22; --sub:#7a7d89; --accent:#ff3d5a;
   box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{background:#fff;color:#1b1c22;font:16px/1.45 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;color-scheme:light;-webkit-font-smoothing:antialiased}
-.app{max-width:560px;height:100%;margin:0 auto;display:flex;flex-direction:column;position:relative;background:#fff}
-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bar);border-bottom:1px solid #eceef2;flex:none}
-.pill{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:22px;background:#f2f3f6;border:1px solid #e3e5ea;color:#1b1c22;cursor:pointer}
-header h1{flex:1;margin:0;color:#1b1c22;font-size:19px;font-weight:700;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tools{display:flex;align-items:center;gap:18px;height:44px;padding:0 16px;border-radius:22px;background:#f2f3f6;border:1px solid #e3e5ea}
+body{background:var(--chat-bg);color:#1b1c22;font:16px/1.45 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;color-scheme:light;-webkit-font-smoothing:antialiased}
+.app{max-width:560px;height:100%;margin:0 auto;display:flex;flex-direction:column;position:relative;background:var(--chat-bg)}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bar);border-bottom:1px solid #ece9f6;flex:none}
+.pill{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:22px;background:rgba(255,255,255,.75);border:1px solid #e6e3f2;color:#38364d;cursor:pointer}
+header h1{flex:1;margin:0;color:#38364d;font-size:19px;font-weight:700;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;align-items:center;gap:18px;height:44px;padding:0 16px;border-radius:22px;background:rgba(255,255,255,.75);border:1px solid #e6e3f2;color:#38364d}
 .live{background:var(--accent);color:#fff;font-weight:800;font-size:11px;padding:3px 6px;border-radius:5px}
 svg{display:block}
-#feed{flex:1;overflow-y:auto;padding:14px 14px 28px;scroll-behavior:smooth;color:var(--text);background:#fff}
+#feed{flex:1;overflow-y:auto;padding:14px 14px 28px;scroll-behavior:smooth;color:var(--text);background:var(--chat-bg)}
 .date{text-align:center;margin:16px 0 8px}
 .date span{display:inline-block;font-size:12px;color:var(--sub);background:rgba(0,0,0,.05);padding:4px 12px;border-radius:12px}
 .row{display:flex;gap:10px;margin-top:3px}
@@ -40,9 +41,9 @@ svg{display:block}
 .row.r .line{flex-direction:row-reverse}
 .time{font-size:10px;color:var(--sub);white-space:nowrap;padding-bottom:2px}
 .b{font-size:14px;line-height:1.4;background:var(--bubble-l);padding:9px 14px;border-radius:22px;word-break:break-word;white-space:pre-wrap}
-.row.r .b{background:var(--bubble-r);color:#fff}
-.row:not(.r) .b{color:#10202c}
-.row:not(.r) .play{background:rgba(0,0,0,.12)}
+.row.r .b{background:var(--bubble-r);color:#38364d}
+.row:not(.r) .b{color:#38364d}
+.play{background:rgba(56,54,77,.1)!important}
 .photo{padding:0;overflow:hidden;background:none!important;cursor:zoom-in}
 .photo img{display:block;width:100%;max-width:300px;max-height:380px;object-fit:cover;border-radius:20px}
 .voice{display:flex;align-items:center;gap:10px;padding:9px 16px 9px 10px;min-width:200px}
@@ -83,12 +84,12 @@ button:focus-visible,.pill:focus-visible{outline:2px solid #b9b2f0;outline-offse
     "left": {
       "name": "댕검사님",
       "avatar": "",
-      "color": "#5a8fb8"
+      "color": "#8fc3e3"
     },
     "right": {
       "name": "박슈",
       "avatar": "",
-      "color": "#8b7fd0"
+      "color": "#b3a0e8"
     }
   },
   "messages": [
