@@ -23,7 +23,6 @@ header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var
 .pill{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:22px;background:rgba(255,255,255,.75);border:1px solid #e6e3f2;color:#38364d;cursor:pointer}
 header h1{flex:1;margin:0;color:#38364d;font-size:19px;font-weight:700;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tools{display:flex;align-items:center;gap:18px;height:44px;padding:0 16px;border-radius:22px;background:rgba(255,255,255,.75);border:1px solid #e6e3f2;color:#38364d}
-.live{background:var(--accent);color:#fff;font-weight:800;font-size:11px;padding:3px 6px;border-radius:5px}
 svg{display:block}
 #feed{flex:1;overflow-y:auto;padding:14px 14px 28px;scroll-behavior:smooth;color:var(--text);background:var(--chat-bg)}
 .date{text-align:center;margin:16px 0 8px}
@@ -58,6 +57,16 @@ svg{display:block}
 #lb.show{display:flex}
 #lb img{max-width:96vw;max-height:92vh;border-radius:8px}
 button:focus-visible,.pill:focus-visible{outline:2px solid #b9b2f0;outline-offset:2px}
+.tools button{display:flex;align-items:center;justify-content:center;background:none;border:0;padding:0;color:inherit;cursor:pointer}
+#sbar{display:none;align-items:center;gap:8px;padding:8px 14px;background:#fdfcff;border-bottom:1px solid #ece9f6;flex:none}
+#sbar.show{display:flex}
+#q{flex:1;min-width:0;font:inherit;font-size:15px;color:#38364d;padding:9px 14px;border:0;border-radius:18px;background:#f1ecfc}
+#q:focus{outline:none;box-shadow:0 0 0 2px #cfc0f2}
+#cnt{font-size:12px;color:var(--sub);white-space:nowrap;min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
+#sbar button{flex:none;width:34px;height:34px;border-radius:50%;border:0;background:#f1ecfc;color:#38364d;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#sbar button:disabled{opacity:.4;cursor:default}
+mark{background:#ffe9a8;color:inherit;border-radius:4px;padding:0 1px}
+mark.cur{background:#ffb84d}
 </style>
 </head>
 <body>
@@ -66,11 +75,17 @@ button:focus-visible,.pill:focus-visible{outline:2px solid #b9b2f0;outline-offse
     <div class="pill" role="button" tabindex="0" aria-label="뒤로" onclick="history.length>1?history.back():location.href='../'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 5l-7 7 7 7"/></svg></div>
     <h1 id="title"></h1>
     <div class="tools">
-      <span class="live">LIVE</span>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg>
+      <button id="sbtn" aria-label="검색"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg></button>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </div>
   </header>
+  <div id="sbar">
+    <input id="q" type="search" placeholder="대화 검색" autocomplete="off" aria-label="대화 검색">
+    <span id="cnt"></span>
+    <button id="sup" aria-label="이전 결과" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15l7-7 7 7"/></svg></button>
+    <button id="sdn" aria-label="다음 결과" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></button>
+    <button id="sx" aria-label="검색 닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
   <main id="feed"></main>
   <button id="down" aria-label="맨 아래로"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></button>
 </div>
@@ -163,6 +178,7 @@ const ogt = document.querySelector('meta[property="og:title"]'); if(ogt) ogt.con
 const sample = (c1,c2) => 'data:image/svg+xml;utf8,' + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="760"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="600" height="760" fill="url(#g)"/><circle cx="300" cy="330" r="90" fill="rgba(255,255,255,.35)"/><rect x="170" y="450" width="260" height="150" rx="75" fill="rgba(255,255,255,.35)"/></svg>`);
 
+const bubbles = [];
 const fmtDate = d => { const [y,m,dd]=d.split('-').map(Number); const w='일월화수목금토'[new Date(y,m-1,dd).getDay()]; return `${y}년 ${m}월 ${dd}일 ${w}요일`; };
 const fmtDur = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
 
@@ -217,7 +233,7 @@ function body(m){
     d.appendChild(img); return d;
   }
   if(m.type==='voice') return voiceBubble(m);
-  const d = document.createElement('div'); d.className='b'; d.textContent = m.text; return d;
+  const d = document.createElement('div'); d.className='b'; d.textContent = m.text; d._t = m.text || ''; bubbles.push(d); return d;
 }
 
 let prev = null;
@@ -247,6 +263,56 @@ feed.addEventListener('scroll', () => down.classList.toggle('show', !atBottom())
 down.onclick = () => feed.scrollTo({top:feed.scrollHeight});
 $('#lb').onclick = () => $('#lb').classList.remove('show');
 feed.style.scrollBehavior='auto'; feed.scrollTop = feed.scrollHeight; feed.style.scrollBehavior='';
+
+/* ---------- 검색 ---------- */
+let hits = [], idx = -1;
+const q = $('#q'), cnt = $('#cnt'), sup = $('#sup'), sdn = $('#sdn'), sbar = $('#sbar');
+function clearMarks(){
+  bubbles.forEach(b => { if(b._marked){ b.textContent = b._t; b._marked = false; } });
+  hits = []; idx = -1;
+}
+function updateCount(){
+  if(!q.value.trim()){ cnt.textContent = ''; }
+  else cnt.textContent = hits.length ? (idx+1) + '/' + hits.length : '결과 없음';
+  sup.disabled = sdn.disabled = hits.length < 2;
+}
+function focusHit(){
+  hits.forEach(h => h.classList.remove('cur'));
+  if(idx < 0 || !hits[idx]) return updateCount();
+  hits[idx].classList.add('cur');
+  hits[idx].scrollIntoView({block:'center'});
+  updateCount();
+}
+function doSearch(){
+  clearMarks();
+  const key = q.value.trim();
+  if(key){
+    const lk = key.toLowerCase();
+    bubbles.forEach(b => {
+      const t = b._t, lt = t.toLowerCase();
+      let i = lt.indexOf(lk); if(i < 0) return;
+      b.textContent = ''; let last = 0;
+      while(i >= 0){
+        if(i > last) b.append(t.slice(last, i));
+        const mk = document.createElement('mark');
+        mk.textContent = t.slice(i, i + key.length);
+        b.appendChild(mk); hits.push(mk);
+        last = i + key.length; i = lt.indexOf(lk, last);
+      }
+      if(last < t.length) b.append(t.slice(last));
+      b._marked = true;
+    });
+    idx = hits.length - 1; /* 가장 최근 결과부터 */
+  }
+  focusHit();
+}
+const step = d => { if(hits.length){ idx = (idx + d + hits.length) % hits.length; focusHit(); } };
+$('#sbtn').onclick = () => { sbar.classList.toggle('show'); if(sbar.classList.contains('show')) q.focus(); else { q.value=''; doSearch(); } };
+$('#sx').onclick = () => { sbar.classList.remove('show'); q.value=''; doSearch(); };
+q.addEventListener('input', doSearch);
+q.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); step(e.shiftKey ? 1 : -1); } if(e.key==='Escape') $('#sx').click(); });
+sup.onclick = () => step(-1);
+sdn.onclick = () => step(1);
 }
 
 /* messages.json 이 있으면 우선 사용, 없거나 실패하면 내장 데이터 사용 */
