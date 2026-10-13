@@ -118,6 +118,25 @@
     { "side": "left", "type": "text", "time": "19:46", "text": "좋았다는 반응이 많아서 다행이다\nㅎㅎ" },
     { "side": "left", "type": "text", "time": "19:46", "text": "이주임도 열촬중이니" },
     { "side": "left", "type": "text", "time": "19:47", "text": "나도 내일 촬영할거 열심히 준비하러 가야겠다ㅎㅎ" },
-    { "side": "left", "type": "text", "time": "19:47", "text": "다녀올게~~" }
+    { "side": "left", "type": "text", "time": "19:47", "text": "다녀올게~~" },
+    { "side": "right", "type": "text", "time": "21:23", "text": "이제끝났다" },
+    { "side": "left", "type": "text", "time": "21:50", "text": "아이고 늦게까지도했네" },
+    { "side": "left", "type": "text", "time": "21:50", "text": "고생했슈👍 얼릉 퇴근하고 맛있는거 먹어" },
+    { "side": "right", "type": "text", "time": "22:23", "text": "나는 삼식이의 모습이 궁금하다." },
+    { "side": "right", "type": "text", "time": "22:23", "text": "사진을 달라." },
+    { "side": "right", "type": "text", "time": "22:23", "text": "그리고 당신은 무엇을 하고있나요?" },
+    { "side": "left", "type": "text", "time": "22:28", "text": "ㅋㅋㅋㅋㅋ저 ai같은 말투뭐야" },
+    { "side": "left", "type": "image", "time": "22:28", "src":"img/03.png" },
+    { "side": "left", "type": "text", "time": "22:28", "text": "어때 너무 귀엽지ㅋㅋㅋㅋ" },
+    { "side": "right", "type": "text", "time": "22:30", "text": "삼식이는 지금 나에게 메롱을 하나요?" },
+    { "side": "right", "type": "text", "time": "22:32", "text": "형은 뭐하고있어요?" },
+    { "side": "left", "type": "text", "time": "23:44", "text": "ㅋㅋㅋㅋㅋ나 내일 촬영하는데 준비할게 있어서" },
+    { "side": "left", "type": "text", "time": "23:44", "text": "방금 끝!" },
+    { "side": "left", "type": "text", "time": "23:47", "text": "박슈는 오늘 고생해서 잠들었나?ㅋㅋㅋ" },
+    { "side": "right", "type": "text", "time": "23:58", "text": "전 형보다 체력이 좋아서 아직 쌩쌩" },
+
+    { "side": "left", "type": "text", "time": "00:03", "text": "와.. 두세시간 자고 지금까지 쌩쌩한거면 진짜 대박이긴하다", "date": "2026-07-21" },
+    { "side": "left", "type": "text", "time": "00:03", "text": "난 벌써 잘준비중인데ㅋㅋㅋㅋ" },
+    { "side": "left", "type": "text", "time": "00:04", "text": "이주임 체력 인정!" }
   ]
 }
