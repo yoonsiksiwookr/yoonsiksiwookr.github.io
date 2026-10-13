@@ -204,11 +204,17 @@ function voiceBubble(m){
   btn.innerHTML = icoPlay;
   const wave = document.createElement('div'); wave.className = 'wave';
   const N = 26, bars = [];
-  for(let i=0;i<N;i++){ const e=document.createElement('i'); e.style.height = (6 + Math.abs(Math.sin(i*1.7+m.dur)*18)) + 'px'; wave.appendChild(e); bars.push(e); }
-  const dur = document.createElement('span'); dur.className='dur'; dur.textContent = fmtDur(m.dur);
+  for(let i=0;i<N;i++){ const e=document.createElement('i'); e.style.height = (6 + Math.abs(Math.sin(i*1.7+(m.dur||(m.src||'').length))*18)) + 'px'; wave.appendChild(e); bars.push(e); }
+  const dur = document.createElement('span'); dur.className='dur'; dur.textContent = fmtDur(m.dur||0);
   wrap.append(btn, wave, dur);
 
   let audio = m.src ? new Audio(m.src) : null, t = 0, timer = null, playing = false;
+  /* dur 를 안 적어도 음성 파일에서 길이를 자동으로 읽어옴 */
+  if(audio){
+    audio.preload = 'metadata';
+    audio.addEventListener('error', () => { dur.textContent = '파일없음'; dur.style.minWidth = '48px'; });
+    audio.addEventListener('loadedmetadata', () => { if(isFinite(audio.duration)){ m.dur = Math.round(audio.duration); dur.textContent = fmtDur(m.dur); } });
+  }
   const paint = frac => bars.forEach((b,i)=>b.classList.toggle('on', i < Math.round(frac*N)));
   const stop = () => { playing=false; btn.innerHTML=icoPlay; clearInterval(timer); if(audio) audio.pause(); };
   const reset = () => { stop(); t=0; paint(0); dur.textContent=fmtDur(m.dur); if(audio) audio.currentTime=0; };
