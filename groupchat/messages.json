@@ -1,0 +1,26 @@
+{
+  "title": "김윤식&박시우",
+  "people": {
+    "left": {
+      "name": "댕검사님",
+      "avatar": "",
+      "color": "#5a8fb8"
+    },
+    "right": {
+      "name": "박슈",
+      "avatar": "",
+      "color": "#8b7fd0"
+    }
+  },
+  "messages": [
+    { "side": "left",  "type": "text", "time": "18:00", "text": "6시땡ㅎㅎ", "date": "2026-07-20" },
+    { "side": "right", "type": "text", "time": "18:00", "text": "똑똑" },
+    { "side": "left",  "type": "text", "time": "18:01", "text": "박슈 아직 촬영중?ㅋㅋㅋ" },
+    { "side": "right", "type": "text", "time": "18:01", "text": "저 여기 들어오려고" },
+    { "side": "right", "type": "text", "time": "18:01", "text": "알람까지 맞춰놨어요" },
+    { "side": "left",  "type": "text", "time": "18:01", "text": "나돈뎈ㅋㅋㅋㅋㅋ" },
+    { "side": "right", "type": "text", "time": "18:01", "text": "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ 역시😽" },
+    { "side": "left",  "type": "text", "time": "18:01", "text": "기념으로 우리 같이찍은사진 하나 여기에 보내줘 슈야" },
+    { "side": "right", "type": "text", "time": "18:02", "text": "오케이~~" }
+  ]
+}
