@@ -137,6 +137,18 @@
 
     { "side": "left", "type": "text", "time": "00:03", "text": "와.. 두세시간 자고 지금까지 쌩쌩한거면 진짜 대박이긴하다", "date": "2026-07-21" },
     { "side": "left", "type": "text", "time": "00:03", "text": "난 벌써 잘준비중인데ㅋㅋㅋㅋ" },
-    { "side": "left", "type": "text", "time": "00:04", "text": "이주임 체력 인정!" }
+    { "side": "left", "type": "text", "time": "00:04", "text": "이주임 체력 인정!" },
+    { "side": "left", "type": "text", "time": "00:13", "text": "이주임 내가 과제를 하나 줄게" },
+    { "side": "left", "type": "text", "time": "00:13", "text": "체력이 약한 검사님은 이제 잘테니" },
+    { "side": "left", "type": "text", "time": "00:13", "text": "이주임처럼 체력 강한" },
+    { "side": "left", "type": "text", "time": "00:13", "text": "우리 팬들이랑 나대신 이야기 많이 해주고 자" },
+    { "side": "left", "type": "text", "time": "00:13", "text": "이주임도 좋은꿈꿔🌙 굿나잇." },
+    { "side": "left", "type": "voice", "time": "00:17", "src": "audio/260721_01.m4a" },
+    { "side": "left", "type": "text", "time": "00:17", "text": "-주태선 말투-" },
+    { "side": "right", "type": "voice", "time": "00:23", "src": "audio/260721_02.m4a" },
+    { "side": "right", "type": "text", "time": "01:39", "text": "검사님이 과제를 주셨어요" },
+    { "side": "right", "type": "text", "time": "01:39", "text": "체력이약한 자기대신 놀아주라구!!!" },
+    { "side": "right", "type": "text", "time": "01:40", "text": "주검사님 자고있을때 내사진 하나" },
+    { "side": "right", "type": "image", "time": "01:40", "src":"img/04.png" }
   ]
 }
