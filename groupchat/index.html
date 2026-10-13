@@ -46,12 +46,12 @@ svg{display:block}
 .play{background:rgba(56,54,77,.1)!important}
 .photo{padding:0;overflow:hidden;background:none!important;cursor:zoom-in}
 .photo img{display:block;width:100%;max-width:300px;max-height:380px;object-fit:cover;border-radius:20px}
-.voice{display:flex;align-items:center;gap:10px;padding:9px 16px 9px 10px;min-width:200px}
+.voice{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;width:fit-content}
 .play{flex:none;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:inherit;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.wave{display:flex;align-items:center;gap:2px;height:28px;flex:1}
-.wave i{display:block;width:3px;border-radius:2px;background:currentColor;opacity:.35}
+.wave{display:flex;align-items:center;gap:2px;height:26px;flex:none}
+.wave i{display:block;flex:none;width:3px;min-height:4px;border-radius:2px;background:currentColor;opacity:.35}
 .wave i.on{opacity:1}
-.dur{font-size:12px;opacity:.85;font-variant-numeric:tabular-nums;min-width:32px;text-align:right}
+.dur{font-size:12px;opacity:.85;font-variant-numeric:tabular-nums;min-width:30px;text-align:right;white-space:nowrap}
 #down{position:absolute;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;border:1px solid #e3e5ea;background:#fff;color:#222;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 #down.show{display:flex}
 #lb{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:9;cursor:zoom-out}
@@ -203,8 +203,8 @@ function voiceBubble(m){
   const icoPause = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
   btn.innerHTML = icoPlay;
   const wave = document.createElement('div'); wave.className = 'wave';
-  const N = 26, bars = [];
-  for(let i=0;i<N;i++){ const e=document.createElement('i'); e.style.height = (6 + Math.abs(Math.sin(i*1.7+(m.dur||(m.src||'').length))*18)) + 'px'; wave.appendChild(e); bars.push(e); }
+  const N = 18, bars = [];
+  for(let i=0;i<N;i++){ const e=document.createElement('i'); e.style.height = (5 + Math.abs(Math.sin(i*1.7+(m.src||'').length)*16)) + 'px'; wave.appendChild(e); bars.push(e); }
   const dur = document.createElement('span'); dur.className='dur'; dur.textContent = fmtDur(m.dur||0);
   wrap.append(btn, wave, dur);
 
