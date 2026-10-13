@@ -104,6 +104,20 @@
     { "side": "right", "type": "text", "time": "18:33", "text": "밥 맛있게 먹고" },
     { "side": "right", "type": "text", "time": "18:33", "text": "삼행시 다시 준비하도록" },
     { "side": "left", "type": "text", "time": "18:33", "text": "잘하고 오슈" },
-    { "side": "left", "type": "text", "time": "18:33", "text": "싫어~ 잘했잖아" }
+    { "side": "left", "type": "text", "time": "18:33", "text": "싫어~ 잘했잖아" },
+    { "side": "right", "type": "voice", "time": "18:34", "src": "audio/260720_01.m4a" },
+    { "side": "left", "type": "voice", "time": "18:34", "src": "audio/260720_02.m4a" },
+    { "side": "left", "type": "text", "time": "18:50", "text": "나는 구운치킨 먹기로 결정했어ㅎㅎ🍗" },
+    { "side": "left", "type": "text", "time": "18:53", "text": "우리 팬들도 저녁 잘 챙겨먹어~~😋" },
+    { "side": "left", "type": "image", "time": "19:09", "src":"img/02.png" },
+    { "side": "left", "type": "text", "time": "19:09", "text": "이주임 없을때 내사진 하나" },
+    { "side": "left", "type": "text", "time": "19:14", "text": "비하인드로 촬영할때 내가 입었던\n옷이 내복,셔츠,베스트,자켓,코트였거든?" },
+    { "side": "left", "type": "text", "time": "19:14", "text": "안그래도 몸이큰데 무슨 곰처럼 나오더라ㅋㅋㅋㅋㅋ" },
+    { "side": "left", "type": "text", "time": "19:14", "text": "촬영하다보면 옷이 너무 무거워서\n목이랑 어깨가 진짜 많이 아팠어ㅠ" },
+    { "side": "left", "type": "text", "time": "19:17", "text": "오히려 체격이 더 커보여서 좋았나?ㅋㅋㅋ" },
+    { "side": "left", "type": "text", "time": "19:46", "text": "좋았다는 반응이 많아서 다행이다\nㅎㅎ" },
+    { "side": "left", "type": "text", "time": "19:46", "text": "이주임도 열촬중이니" },
+    { "side": "left", "type": "text", "time": "19:47", "text": "나도 내일 촬영할거 열심히 준비하러 가야겠다ㅎㅎ" },
+    { "side": "left", "type": "text", "time": "19:47", "text": "다녀올게~~" }
   ]
 }
