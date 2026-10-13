@@ -69,6 +69,7 @@
     { "side": "right", "type": "text", "time": "18:23", "text": "채" },
     { "side": "left", "type": "text", "time": "18:23", "text": "채하 주임이" },
     { "side": "right", "type": "text", "time": "18:23", "text": "하" },
-    { "side": "left", "type": "text", "time": "18:24", "text": "하늘 계장님보다 좋다(송계장님 죄송해요😂)" }
+    { "side": "left", "type": "text", "time": "18:24", "text": "하늘 계장님보다 좋다(송계장님 죄송해요😂)" },
+    { "side": "left", "type": "image", "time": "18:24", "src":"icon/011.png" }
   ]
 }
