@@ -9,6 +9,7 @@
 <title>김윤식&amp;박시우</title>
 <style>
 :root{
+  --icon-size:96px; /* ← 아이콘 크기 */
   --chat-bg:#fdfcff; /* ← 대화창 배경색: 스케줄 사이트와 같은 배경색 */
   --bar:linear-gradient(90deg,#eaf5fb,#f1ecfc); --bubble-l:#dcedf8; --bubble-r:#e3dbf8;
   --text:#1b1c22; --sub:#7a7d89; --accent:#ff3d5a;
@@ -65,6 +66,9 @@ button:focus-visible,.pill:focus-visible{outline:2px solid #b9b2f0;outline-offse
 #cnt{font-size:12px;color:var(--sub);white-space:nowrap;min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
 #sbar button{flex:none;width:34px;height:34px;border-radius:50%;border:0;background:#f1ecfc;color:#38364d;display:flex;align-items:center;justify-content:center;cursor:pointer}
 #sbar button:disabled{opacity:.4;cursor:default}
+/* 아이콘(이모티콘): 말풍선 없이 고정 크기 */
+.b.icon{padding:0!important;background:none!important;border-radius:0}
+.icon img{display:block;flex:none;width:var(--icon-size);height:var(--icon-size);object-fit:contain}
 mark{background:#ffe9a8;color:inherit;border-radius:4px;padding:0 1px}
 mark.cur{background:#ffb84d}
 </style>
@@ -225,7 +229,12 @@ function voiceBubble(m){
 }
 
 function body(m){
-  if(m.type==='image'){
+  if(m.type==='icon'){
+    const d = document.createElement('div'); d.className='b icon';
+    const img = document.createElement('img'); img.alt='아이콘'; img.loading='lazy'; img.src = m.src;
+    d.appendChild(img); return d;
+  }
+  if(m.type==='image' || m.type==='img'){
     const d = document.createElement('div'); d.className='b photo';
     const img = document.createElement('img'); img.alt='사진'; img.loading='lazy';
     img.src = m.src || sample('#cdb89a','#8a7a66');
