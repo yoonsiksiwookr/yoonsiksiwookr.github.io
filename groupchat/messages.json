@@ -300,6 +300,25 @@
     { "side": "right", "type": "text", "time": "22:47", "text": "왜이렇게 조용해요" },
     { "side": "right", "type": "text", "time": "22:47", "text": "응답하라!!!!" },
     { "side": "right", "type": "text", "time": "23:01", "text": "혀어어엉" },
-    { "side": "right", "type": "text", "time": "23:01", "text": "어디갔어어어" }
+    { "side": "right", "type": "text", "time": "23:01", "text": "어디갔어어어" },
+    { "side": "right", "type": "text", "time": "23:07", "text": "(술냄새난다)술 안 마셨는데..🍉" },
+    { "side": "right", "type": "text", "time": "23:09", "text": "(시우야 나쁜 댓글 보지마)저는 아무렇지 않습니다 하하😉" },
+    { "side": "left", "type": "text", "time": "23:09", "text": "박슈~~" },
+    { "side": "left", "type": "text", "time": "23:09", "text": "오늘 스케줄 잘했어?ㅋㅋㅋ" },
+    { "side": "left", "type": "text", "time": "23:10", "text": "사진이랑 영상봤는데 멋지던데?ㅎㅎ" },
+    { "side": "right", "type": "text", "time": "23:10", "text": "잘했죠 형" },
+    { "side": "right", "type": "text", "time": "23:11", "text": "마카오는 저만 믿으세요😎" },
+    { "side": "left", "type": "text", "time": "23:12", "text": "ㅋㅋㅋㅋㅋㅋ슈만 믿을게" },
+    { "side": "left", "type": "text", "time": "23:13", "text": "우리 티켓 완판됐대!!!" },
+    { "side": "right", "type": "text", "time": "23:19", "text": "맞아요 .. 진짜 깜짝 놀랬어요 ..." },
+    { "side": "right", "type": "text", "time": "23:20", "text": "너무너무너무 감사합니다🙏🏻" },
+    { "side": "left", "type": "text", "time": "23:31", "text": "시우랑 나랑 잘 준비해볼게!! 많이 기대해줘ㅎㅎㅎ" },
+    { "side": "left", "type": "text", "time": "23:52", "text": "상하이에있는 슈야.. 형은 한계야" },
+    { "side": "left", "type": "text", "time": "23:52", "text": "얼릉 한국에 돌아와😂😂" },
+    { "side": "left", "type": "text", "time": "23:52", "text": "나는 꿈나라로🌙🌙" },
+    { "side": "left", "type": "voice", "time": "23:52", "src": "audio/260725_01.m4a" },
+    
+    { "side": "right", "type": "text", "time": "00:41", "text": "선물 사갈게요ㅎㅎㅎㅎㅎ", "date": "2026-07-26" },
+    { "side": "right", "type": "voice", "time": "00:42", "src": "audio/260726_01.m4a" }
   ]
 }
