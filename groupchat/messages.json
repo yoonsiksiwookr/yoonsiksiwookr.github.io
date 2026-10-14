@@ -366,6 +366,17 @@
     { "side": "left", "type": "text", "time": "12:19", "text": "토꺵이 뭐해ㅎㅎ" },
     { "side": "right", "type": "text", "time": "13:16", "text": "형생각ㅋ" },
     { "side": "left", "type": "text", "time": "13:19", "text": "어훜ㅋㅋㅋㅋ 갑자기 그렇게 훅 들어오지마" },
-    { "side": "right", "type": "text", "time": "13:19", "text": "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" }
+    { "side": "right", "type": "text", "time": "13:19", "text": "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" },
+    { "side": "right", "type": "text", "time": "13:20", "text": "이대답 원한거 아니에요?" },
+    { "side": "left", "type": "text", "time": "13:20", "text": "깜짝놀라라서ㅋㅋㅋㅋ 갑자기 멍해졌어" },
+    { "side": "left", "type": "text", "time": "13:21", "text": "상하이 날씨 어때?ㅎㅎ" },
+    { "side": "right", "type": "text", "time": "13:26", "text": "ㅋㅋㅋㅋㅋㅋ 날씨 너무좋아요ㅜㅜㅜ혼자보기 아까워" },
+    { "side": "right", "type": "icon", "time": "13:26", "src":"icon/069.png" },
+    { "side": "left", "type": "text", "time": "13:31", "text": "그럼 사진하나 보내줘~~~~" },
+    { "side": "left", "type": "image", "time": "19:15", "src":"img/20.png" },
+    { "side": "left", "type": "text", "time": "19:16", "text": "시우가 디즈니랜드에서 득템했대ㅋㅋㅋㅋㅋ" },
+    { "side": "left", "type": "text", "time": "19:16", "text": "빨리 한국와ㅜ🥕" },
+    { "side": "left", "type": "icon", "src":"icon/055.png" },
+    { "side": "left", "type": "text", "time": "19:17", "text": "인형 너무 귀엽다ㅋㅋㅋㅋㅋㅋㅋ" }
   ]
 }
