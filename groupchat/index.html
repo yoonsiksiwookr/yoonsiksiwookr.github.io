@@ -69,6 +69,15 @@ button:focus-visible,.pill:focus-visible{outline:2px solid #b9b2f0;outline-offse
 /* 아이콘(이모티콘): 말풍선 없이 고정 크기 */
 .b.icon{padding:0!important;background:none!important;border-radius:0}
 .icon img{display:block;flex:none;width:var(--icon-size);height:var(--icon-size);object-fit:contain}
+/* 영상: 채팅창에는 미리보기, 클릭하면 전체 화면 재생 */
+.vid{position:relative;cursor:pointer}
+.vid video{display:block;width:240px;max-width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:20px;background:#2a2838;pointer-events:none}
+.vid .badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.vid .badge span{width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;color:#fff}
+#vb{position:fixed;inset:0;background:rgba(0,0,0,.96);display:none;align-items:center;justify-content:center;z-index:10}
+#vb.show{display:flex}
+#vb video{width:100%;height:100%;object-fit:contain;background:#000}
+#vx{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:11}
 mark{background:#ffe9a8;color:inherit;border-radius:4px;padding:0 1px}
 mark.cur{background:#ffb84d}
 </style>
@@ -94,6 +103,7 @@ mark.cur{background:#ffb84d}
   <button id="down" aria-label="맨 아래로"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></button>
 </div>
 <div id="lb"><img alt=""></div>
+<div id="vb"><video id="vp" controls playsinline></video><button id="vx" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
 
 <!-- 내장 대화 데이터: 같은 폴더에 messages.json 이 있으면 그것을 우선 사용하고, 없으면 이 데이터를 사용합니다 -->
 <script id="chat-data" type="application/json">
@@ -235,6 +245,19 @@ function voiceBubble(m){
 }
 
 function body(m){
+  if(m.type==='video'){
+    const d = document.createElement('div'); d.className='b photo vid';
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'metadata'; v.setAttribute('playsinline','');
+    if(m.poster) v.poster = m.poster;
+    v.src = m.src + '#t=0.1';
+    if(m.ratio) v.style.aspectRatio = m.ratio;
+    const bd = document.createElement('div'); bd.className='badge';
+    bd.innerHTML = '<span><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
+    d.append(v, bd);
+    d.onclick = () => openVideo(m.src);
+    return d;
+  }
   if(m.type==='icon'){
     const d = document.createElement('div'); d.className='b icon';
     const img = document.createElement('img'); img.alt='아이콘'; img.loading='lazy'; img.src = m.src;
@@ -278,6 +301,20 @@ feed.addEventListener('scroll', () => down.classList.toggle('show', !atBottom())
 down.onclick = () => feed.scrollTo({top:feed.scrollHeight});
 $('#lb').onclick = () => $('#lb').classList.remove('show');
 feed.style.scrollBehavior='auto'; feed.scrollTop = feed.scrollHeight; feed.style.scrollBehavior='';
+
+/* ---------- 영상 전체 화면 재생 ---------- */
+const vb = $('#vb'), vp = $('#vp');
+function openVideo(src){
+  document.dispatchEvent(new CustomEvent('stopvoice',{detail:null}));
+  vp.src = src; vb.classList.add('show');
+  vp.play().catch(()=>{});
+}
+function closeVideo(){
+  vp.pause(); vp.removeAttribute('src'); vp.load(); vb.classList.remove('show');
+}
+$('#vx').onclick = closeVideo;
+vb.addEventListener('click', e => { if(e.target === vb) closeVideo(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape' && vb.classList.contains('show')) closeVideo(); });
 
 /* ---------- 검색 ---------- */
 let hits = [], idx = -1;
