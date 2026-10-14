@@ -248,6 +248,8 @@
     { "side": "right", "type": "text", "time": "19:08", "text": "주검사님 서프라이즈 해줄려고했는데 실패.." },
     { "side": "left", "type": "text", "time": "19:29", "text": "이미 다봤거덩~?" },
     { "side": "right", "type": "text", "time": "19:59", "text": "흥….☹️" },
-    { "side": "left", "type": "text", "time": "20:13", "text": "ㅋㅋㅋ잘 도착했어?" }
+    { "side": "left", "type": "text", "time": "20:13", "text": "ㅋㅋㅋ잘 도착했어?" },
+    { "side": "left", "type": "image", "time": "20:13", "src":"img/14.png" },
+    { "side": "left", "type": "text", "time": "20:13", "text": "박슈봄" }
   ]
 }
