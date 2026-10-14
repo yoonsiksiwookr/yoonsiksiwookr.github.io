@@ -501,6 +501,15 @@
     { "side": "left", "type": "text", "time": "00:34", "text": "대표님..ㅠㅠ 진짜 고생이 많아요" },
     { "side": "left", "type": "text", "time": "00:34", "text": "신데렐라는 이제 자러가볼게요" },
     { "side": "left", "type": "text", "time": "00:34", "text": "굿나잇🌙🌙" },
-    { "side": "right", "type": "text", "time": "00:34", "text": "12시넘어서 신데렐라 아니세요^^" }
+    { "side": "right", "type": "text", "time": "00:34", "text": "12시넘어서 신데렐라 아니세요^^" },
+    { "side": "right", "type": "image", "time": "19:20", "src":"img/31.png" },
+    { "side": "left", "type": "text", "time": "19:20", "text": "슈 하이~~~" },
+    { "side": "left", "type": "text", "time": "19:41", "text": "조심히 가셔요~~" },
+    { "side": "right", "type": "text", "time": "19:47", "text": "일하러 가기싫다ㅜㅜㅠ으아" },
+    { "side": "right", "type": "icon", "time": "19:47", "src":"icon/020.png" },
+    { "side": "left", "type": "text", "time": "21:22", "text": "ㅠㅠ 대표님 화이팅..!" },
+    { "side": "right", "type": "text", "time": "22:05", "text": "운동 파이팅!" },
+        
+    { "side": "left", "type": "text", "time": "00:05", "text": "박슈 오늘 고생많았어ㅎㅎㅎㅎ 잘 자구 좋은꿈꾸셔요~~", "date": "2026-07-31" }
   ]
 }
