@@ -707,8 +707,7 @@
     { "side": "right", "type": "text", "time": "01:17", "text": "몰래하나줄게요" },
     { "side": "right", "type": "image", "time": "01:20", "src":"img/37.png" },
     
-    { "side": "right", "type": "text", "time": "16:48", "text": "안녕하세요 시우입니다\n오늘 형과 함께 공동 라이브를 진행할 예정이었지만\n제 개인 사정으로 인해 예정대로 함께하지 못하게 되었어요\n\n
-                                                                라이브를 기다려주시고 소중한 시간을 미리 비워주셨던 팬 여러분께\n당일 갑작스러운 소식을 전하게 되어 마음이 무겁습니다 너무 미안해요", "date": "2026-08-07" },
+    { "side": "right", "type": "text", "time": "16:48", "text": "안녕하세요 시우입니다\n오늘 형과 함께 공동 라이브를 진행할 예정이었지만\n제 개인 사정으로 인해 예정대로 함께하지 못하게 되었어요\n\n라이브를 기다려주시고 소중한 시간을 미리 비워주셨던 팬 여러분께\n당일 갑작스러운 소식을 전하게 되어 마음이 무겁습니다 너무 미안해요", "date": "2026-08-07" },
     { "side": "left", "type": "text", "time": "17:08", "text": "시우야 걱정하지말고 잘 해결하구와\n밥 잘 챙겨먹구" },
     
     { "side": "right", "type": "text", "time": "02:28", "text": "댕댕형 오늘 고생많았다요", "date": "2026-08-10" },
@@ -725,6 +724,12 @@
             
     { "side": "left", "type": "text", "time": "00:32", "text": "슈도 오늘 고생많앗따 오늘은 좀 일찍자ㅜ", "date": "2026-08-13" },
     { "side": "left", "type": "text", "time": "00:32", "text": "ㅎㅎㅎ굿나잇🌙🌙" },
-    { "side": "right", "type": "text", "time": "00:39", "text": "형두요!!" }
+    { "side": "right", "type": "text", "time": "00:39", "text": "형두요!!" },
+    { "side": "right", "type": "text", "time": "00:39", "text": "굿나잇😝" },
+    { "side": "right", "type": "text", "time": "09:39", "text": "형 오늘도 화이팅!!✌🏻" },
+    { "side": "left", "type": "text", "time": "14:49", "text": "슈도 촬영 화이팅ㅎㅎㅎ" },
+                
+    { "side": "left", "type": "image", "time": "14:32", "src":"img/39.png", "date": "2026-08-16" }
+    
   ]
 }
