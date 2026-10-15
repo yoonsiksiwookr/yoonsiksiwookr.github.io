@@ -872,6 +872,19 @@
     { "side": "right", "type": "text", "time": "23:52", "text": "싫어요ㅜ" },
     { "side": "left", "type": "text", "time": "23:52", "text": "눈치는.." },
     { "side": "left", "type": "text", "time": "23:52", "text": "내가 이래서 널 뽑았지" },
-    { "side": "right", "type": "text", "time": "23:54", "text": "안녕.... 또만나장ㅎㅎㅎㅎ" }
+    { "side": "right", "type": "text", "time": "23:54", "text": "안녕.... 또만나장ㅎㅎㅎㅎ" },
+    { "side": "right", "type": "voice", "time": "23:55", "src": "audio/260831_01.m4a" },
+    { "side": "right", "type": "voice", "time": "23:56", "src": "audio/260831_02.m4a" },
+    { "side": "left", "type": "text", "time": "23:57", "text": "우선 저희 드라마를 사랑해주시고 관심 가져주신 모든 분께 진심으로 감사드린다는 말 하고싶어요.\n여러분 덕분에 시우도 저도 정말 행복한 시간을 보내고 있어요. 특히 저희 두 사람의 케미를 예쁘게 봐주시고 응원해주신 덕분에 이렇게 단체 채팅방이라는 새로운 시도까지 해볼 수 있었던 것 같습니다.😽\n처음 진행한 이벤트라 시우도 저도 부족한 부분도 많았던거 같아요🥹 그래도 끝까지 함께해주시고 많은 관심과 사랑을 보내주셔서 진심으로 감사해요.\n시우와 저는 앞으로 예정된 팬미팅에서 다시 인사드릴 테니 조금만 기다려주시고 많이 기대해주세요!\n그동안 함께해주셔서 정말 감사했습니다. 안녕! 💜" },
+    { "side": "left", "type": "text", "time": "23:57", "text": "난 편지로 마무맇ㅎㅎ" },
+    { "side": "left", "type": "voice", "time": "23:58", "src": "audio/260831_03.m4a" },
+    { "side": "right", "type": "voice", "time": "23:58", "src": "audio/260831_04.m4a" },
+    { "side": "right", "type": "text", "time": "23:59", "text": "신예영님이 부릅니다" },
+    { "side": "right", "type": "text", "time": "23:59", "text": "고마우ㅝ어어어ㅓㅇ" },
+    { "side": "right", "type": "text", "time": "23:59", "text": "우리 왜 헤어져야해" },
+    { "side": "right", "type": "text", "time": "23:59", "text": "안녕..." },
+    { "side": "right", "type": "text", "time": "23:59", "text": "고마워" },
+    { "side": "right", "type": "text", "time": "23:59", "text": "으아" },
+    { "side": "left", "type": "icon", "time": "23:59", "src": "icon/017.png" }
   ]
 }
