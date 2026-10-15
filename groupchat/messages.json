@@ -698,6 +698,33 @@
     { "side": "left", "type": "text", "time": "22:33", "text": "그치만! 나도 하나 보여주고싶은거 있어" },
     { "side": "left", "type": "image", "time": "22:34", "src":"img/36.png" },
     { "side": "left", "type": "text", "time": "22:33", "text": "짠" },
-    { "side": "right", "type": "text", "time": "22:28", "text": "뭐야..." }
+    { "side": "right", "type": "text", "time": "22:28", "text": "뭐야..." },
+
+    { "side": "left", "type": "text", "time": "00:13", "text": "ㅋㅋㅋㅋㅌ슈 잘자고 좋은꿈꾸고", "date": "2026-08-06" },
+    { "side": "left", "type": "text", "time": "00:13", "text": "굿나잇🌙🌙" },
+    { "side": "right", "type": "text", "time": "00:36", "text": "형두 굿나잇🫵🏻" },
+    { "side": "right", "type": "text", "time": "01:17", "text": "형자니깐" },
+    { "side": "right", "type": "text", "time": "01:17", "text": "몰래하나줄게요" },
+    { "side": "right", "type": "image", "time": "01:20", "src":"img/37.png" },
+    
+    { "side": "right", "type": "text", "time": "16:48", "text": "안녕하세요 시우입니다\n오늘 형과 함께 공동 라이브를 진행할 예정이었지만\n제 개인 사정으로 인해 예정대로 함께하지 못하게 되었어요\n\n
+                                                                라이브를 기다려주시고 소중한 시간을 미리 비워주셨던 팬 여러분께\n당일 갑작스러운 소식을 전하게 되어 마음이 무겁습니다 너무 미안해요", "date": "2026-08-07" },
+    { "side": "left", "type": "text", "time": "17:08", "text": "시우야 걱정하지말고 잘 해결하구와\n밥 잘 챙겨먹구" },
+    
+    { "side": "right", "type": "text", "time": "02:28", "text": "댕댕형 오늘 고생많았다요", "date": "2026-08-10" },
+    { "side": "right", "type": "icon", "time": "02:28", "src": "icon/013.png" },
+    { "side": "left", "type": "text", "time": "02:33", "text": "슈도 오늘 고생많았어ㅎㅎㅎ굿나잇🌙" },
+    { "side": "right", "type": "image", "time": "09:22", "src":"img/38.png" },
+    { "side": "right", "type": "text", "time": "09:23", "text": "우리이제 떠나요...." },
+    { "side": "left", "type": "text", "time": "09:23", "text": "한국에서 보아요~~" },
+        
+    { "side": "left", "type": "text", "time": "08:26", "text": "슈 잘 쉬었어?ㅎㅎㅎ", "date": "2026-08-12" },
+    { "side": "right", "type": "text", "time": "11:27", "text": "네에 ~~형은요?" },
+    { "side": "left", "type": "text", "time": "14:50", "text": "나도 푹쉬고 오늘 열촬중이지✌️" },
+    { "side": "right", "type": "text", "time": "15:15", "text": "둘다 촬영 화이팅!!!!😏" },
+            
+    { "side": "left", "type": "text", "time": "00:32", "text": "슈도 오늘 고생많앗따 오늘은 좀 일찍자ㅜ", "date": "2026-08-13" },
+    { "side": "left", "type": "text", "time": "00:32", "text": "ㅎㅎㅎ굿나잇🌙🌙" },
+    { "side": "right", "type": "text", "time": "00:39", "text": "형두요!!" }
   ]
 }
