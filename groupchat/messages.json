@@ -729,7 +729,28 @@
     { "side": "right", "type": "text", "time": "09:39", "text": "형 오늘도 화이팅!!✌🏻" },
     { "side": "left", "type": "text", "time": "14:49", "text": "슈도 촬영 화이팅ㅎㅎㅎ" },
                 
-    { "side": "left", "type": "image", "time": "14:32", "src":"img/39.png", "date": "2026-08-16" }
-    
+    { "side": "left", "type": "image", "time": "14:32", "src":"img/39.png", "date": "2026-08-16" },
+    { "side": "left", "type": "text", "time": "14:32", "text": "여기는 비가 많이온닿ㅎㅎ" },
+    { "side": "left", "type": "text", "time": "14:32", "text": "거기 날씨는 어때 슈?" },
+    { "side": "right", "type": "text", "time": "17:16", "text": "꾸리꾸리 하다요!!" },
+    { "side": "left", "type": "text", "time": "22:15", "text": "너무 고생많았슈" },
+    { "side": "left", "type": "text", "time": "22:15", "text": "얼릉 집가서 푹 쉬자" },
+    { "side": "left", "type": "text", "time": "22:16", "text": "날씨 꾸리꾸리했는데 다행히 비행기 잘 왔네!" },
+    { "side": "right", "type": "text", "time": "22:49", "text": "무사히 도착✌🏻" },
+    { "side": "right", "type": "text", "time": "22:49", "text": "형도 오늘 고생 많았슈" },
+    { "side": "right", "type": "text", "time": "22:49", "text": "나 잘 도착했으니까 일찍 자^^" },
+                    
+    { "side": "left", "type": "text", "time": "00:28", "text": "ㅎㅎㅎㅎ넹", "date": "2026-08-17" },
+    { "side": "left", "type": "text", "time": "00:28", "text": "슈도 고생많았어 잘자구🌙🌙" },
+    { "side": "left", "type": "icon", "src": "icon/012.png" },
+    { "side": "left", "type": "text", "time": "00:28", "text": "좋은꿈꿔" },
+    { "side": "right", "type": "text", "time": "00:35", "text": "넹!🫡" },
+                        
+    { "side": "right", "type": "text", "time": "15:21", "text": "똑똑", "date": "2026-08-19" },
+    { "side": "right", "type": "text", "time": "15:21", "text": "뭐하세요?" },
+    { "side": "left", "type": "text", "time": "16:44", "text": "대청소했어유~" },
+    { "side": "right", "type": "icon", "src": "icon/005.png" },
+    { "side": "right", "type": "text", "time": "16:50", "text": "잘했슈~" },
+    { "side": "left", "type": "text", "time": "18:32", "text": "뭐지.. 담임선생님께 칭찬받은 이 기분은..?ㅋ~" }
   ]
 }
