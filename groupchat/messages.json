@@ -751,6 +751,20 @@
     { "side": "left", "type": "text", "time": "16:44", "text": "대청소했어유~" },
     { "side": "right", "type": "icon", "src": "icon/005.png" },
     { "side": "right", "type": "text", "time": "16:50", "text": "잘했슈~" },
-    { "side": "left", "type": "text", "time": "18:32", "text": "뭐지.. 담임선생님께 칭찬받은 이 기분은..?ㅋ~" }
+    { "side": "left", "type": "text", "time": "18:32", "text": "뭐지.. 담임선생님께 칭찬받은 이 기분은..?ㅋ~" },
+    { "side": "right", "type": "text", "time": "18:39", "text": "김윤식 학생" },
+    { "side": "right", "type": "text", "time": "18:40", "text": "참잘했어요🫰🏻" },
+    { "side": "right", "type": "text", "time": "18:40", "text": "하는김에 우리집도……😭😝" },
+                            
+    { "side": "right", "type": "text", "time": "12:49", "text": "유ㄴ시ㄱ이형 오늘 하루도 밥 잘챙겨먹고 파이팅😽", "date": "2026-08-26" },
+    { "side": "right", "type": "text", "time": "12:52", "text": "대답." },
+    { "side": "right", "type": "text", "time": "13:17", "text": "나 촬영 갔다온다요" },
+    { "side": "right", "type": "text", "time": "13:17", "text": "그때까지 안오면😏" },
+    { "side": "left", "type": "text", "time": "14:18", "text": "ㅋㅋㅋㅋㅋ나도 촬영하다가" },
+    { "side": "left", "type": "text", "time": "14:18", "text": "이제 점심먹어" },
+    { "side": "left", "type": "text", "time": "14:19", "text": "시ㅇㅜ 도 밥 꼭 먹고 촬영 화이팅!!" },
+    { "side": "right", "type": "text", "time": "23:42", "text": "오늘도 고생했슈" },
+    { "side": "right", "type": "text", "time": "23:42", "text": "잘자슈" },
+    { "side": "right", "type": "icon", "time": "23:42", "src": "icon/071.png" }
   ]
 }
