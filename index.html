@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>김윤식 · 박시우 스케줄</title>
 <meta name="description" content="김윤식, 박시우 배우의 월별 스케줄">
-<link rel="stylesheet" href="assets/style.css?v=3">
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <header class="head" id="head">
@@ -61,15 +61,34 @@
   /* 제보 데이터 → 화면용 일정 (두 배우 모두 → 두 개) */
   function fromRemote(r){
     var t = parseTime(r.time);
-    var base = {date:r.date, time:t, timeText: t ? '' : String(r.time||''), title:r.title, place:String(r.place||''), link:r.link};
+    var en = String(r.end||r.endDate||'').slice(0,10);
+    var base = {date:r.date, end:en, time:t, timeText: t ? '' : String(r.time||''), title:r.title, place:String(r.place||''), link:r.link};
     var who = r.actor === 'both' ? ['yoonsik','siwoo'] : [r.actor];
     return who.filter(function(a){return a==='yoonsik'||a==='siwoo'}).map(function(a){
       var o = Object.assign({}, base); o.actor = a; return o;
     });
   }
+  function ymd(dt){ return dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate()); }
+  function md(d){ return (+d.slice(5,7))+'/'+(+d.slice(8,10)); }
+  /* 종료일(end)이 있는 연속 일정 → 기간의 매일 하루씩 펼친다 */
+  function expand(s){
+    var st = String(s.date).slice(0,10), en = String(s.end||'').slice(0,10), re = /^\d{4}-\d{2}-\d{2}$/;
+    if(!re.test(st) || !re.test(en) || en <= st) return [s];
+    var a = [+st.slice(0,4), +st.slice(5,7)-1, +st.slice(8,10)];
+    var total = Math.round((new Date(+en.slice(0,4), +en.slice(5,7)-1, +en.slice(8,10)) - new Date(a[0],a[1],a[2])) / 864e5) + 1;
+    var out = [];
+    for(var i = 0; i < Math.min(total, 92); i++){
+      var o = Object.assign({}, s);
+      o.date = ymd(new Date(a[0], a[1], a[2]+i));
+      o.rangeStart = st; o.rangeEnd = en; o.dayNo = i+1; o.dayTotal = total;
+      out.push(o);
+    }
+    return out;
+  }
   function allData(){
     var seen = {}, out = [];
-    (window.SCHEDULE || []).concat(remote).forEach(function(s){
+    var all = (window.SCHEDULE || []).concat(remote);
+    [].concat.apply([], all.map(expand)).forEach(function(s){
       var k = [s.date,s.actor,s.time,s.title].join('|');
       if(seen[k]) return; seen[k] = 1; out.push(s);
     });
@@ -94,7 +113,8 @@
   }
   function item(s, hideTime){
     var f = el('div', 'entry');
-    if(!hideTime) f.appendChild(el('span', 'time' + (s.time ? '' : ' tbd'), s.time || s.timeText || '시간 미정'));
+    if(!hideTime && (s.time || s.timeText || !s.rangeEnd)) f.appendChild(el('span', 'time' + (s.time ? '' : ' tbd'), s.time || s.timeText || '시간 미정'));
+    if(s.rangeEnd) f.appendChild(el('span', 'range', md(s.rangeStart) + ' ~ ' + md(s.rangeEnd) + ' · ' + s.dayNo + '일차'));
     var t = el('span', 'title');
     if(/^https?:\/\//i.test(s.link || '')){
       var a = el('a', null, s.title);
@@ -130,11 +150,12 @@
         var B = items.filter(function(s){return s.actor==='siwoo' && (s.time||'')===k});
         var joint = [];
         A = A.filter(function(a){
-          var i = B.findIndex(function(b){return String(b.title).trim() === String(a.title).trim()});
+          var i = B.findIndex(function(b){return String(b.title).trim() === String(a.title).trim() && String(b.rangeStart||'') === String(a.rangeStart||'')});
           if(i < 0) return true;
           var b = B.splice(i, 1)[0];
           joint.push({date:a.date, time:a.time, timeText:a.timeText||b.timeText, title:a.title,
-                      place:a.place||b.place, link:a.link||b.link});
+                      place:a.place||b.place, link:a.link||b.link,
+                      rangeStart:a.rangeStart, rangeEnd:a.rangeEnd, dayNo:a.dayNo, dayTotal:a.dayTotal});
           return false;
         });
         if(joint.length) rowsDef.push({j:joint});

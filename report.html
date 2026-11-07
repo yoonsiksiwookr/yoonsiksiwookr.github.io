@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>일정추가 · 김윤식 박시우</title>
-<link rel="stylesheet" href="assets/style.css?v=3">
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <header class="head">
@@ -34,8 +34,14 @@
     </fieldset>
 
     <div class="row">
-      <div class="field"><label for="date">날짜</label><input type="date" id="date" name="date" required></div>
-      <div class="field"><label for="time">시간 <span class="opt">(선택)</span></label><input type="text" id="time" name="time" placeholder="예: 14시, 저녁 7시"></div>
+      <div class="field"><label for="date">날짜 (시작일)</label><input type="date" id="date" name="date" required></div>
+      <div class="field"><label for="end">종료일 <span class="opt">(선택)</span></label><input type="date" id="end" name="end"></div>
+    </div>
+    <p class="hint" style="margin:-.7rem 0 1.2rem">전시회처럼 며칠 동안 이어지는 일정이면 종료일도 골라주세요. 하루짜리면 비워두세요.</p>
+
+    <div class="field">
+      <label for="time">시간 <span class="opt">(선택)</span></label>
+      <input type="text" id="time" name="time" placeholder="예: 14시, 저녁 7시">
     </div>
 
     <div class="field">
@@ -49,8 +55,11 @@
     </div>
 
     <div class="field">
-      <label for="src">링크 <span class="opt">(선택)</span></label>
-      <input type="url" id="src" name="link" inputmode="url" placeholder="https://  공식 계정 게시물, 예매처 등">
+      <div class="linkhead">
+        <label for="src">링크 <span class="opt">(선택)</span></label>
+        <button type="button" class="paste" id="paste">📋 붙여넣기</button>
+      </div>
+      <textarea class="link" id="src" name="link" rows="3" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://  공식 계정 게시물, 예매처 등&#10;링크를 여기에 붙여넣어 주세요"></textarea>
     </div>
 
     <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -64,6 +73,18 @@
 (function(){
   var f = document.getElementById('f'), msg = document.getElementById('msg'), btn = document.getElementById('send');
   function say(t, c){ msg.textContent = t; msg.className = 'msg ' + (c||''); }
+  /* 시작일을 고르면 종료일은 그 이후만 선택되게 */
+  f.date.addEventListener('change', function(){
+    f.end.min = f.date.value;
+    if(f.end.value && f.end.value < f.date.value) f.end.value = '';
+  });
+  /* 클립보드의 링크를 한 번에 붙여넣기 */
+  document.getElementById('paste').addEventListener('click', function(){
+    if(!navigator.clipboard || !navigator.clipboard.readText){ say('이 브라우저에서는 버튼을 쓸 수 없어요. 입력칸을 길게 눌러 붙여넣어 주세요.', 'err'); return; }
+    navigator.clipboard.readText().then(function(t){
+      f.link.value = String(t||'').trim(); f.link.focus(); say('');
+    }).catch(function(){ say('클립보드를 읽을 수 없어요. 입력칸에 직접 붙여넣어 주세요.', 'err'); });
+  });
   f.addEventListener('submit', function(e){
     e.preventDefault();
     if(!f.message.value.trim()){ say('일정 내용을 입력해주세요.', 'err'); f.message.focus(); return; }
@@ -71,6 +92,8 @@
     var lk = f.link.value.trim();
     if(lk && !/^https?:\/\/\S+$/i.test(lk)){ say('링크는 http:// 또는 https:// 로 시작해야 해요.', 'err'); f.link.focus(); return; }
     if(!f.date.value){ say('날짜를 선택해주세요.', 'err'); f.date.focus(); return; }
+    if(f.end.value && f.end.value < f.date.value){ say('종료일은 시작일보다 빠를 수 없어요.', 'err'); f.end.focus(); return; }
+    f.link.value = lk;
     var url = (window.SITE||{}).api || '';
     if(!url || /YOUR_/.test(url)){ say('일정을 저장할 주소가 아직 설정되지 않았어요. (README 참고)', 'err'); return; }
     btn.disabled = true; say('보내는 중…');
