@@ -92,11 +92,16 @@ main{max-width:56rem;margin:0 auto;padding:var(--head-h,9rem) 1.25rem 6rem}
 .cell:not(.empty) + .cell.empty{ }
 
 .entry + .entry{margin-top:.7rem}
-.time{display:block;font-size:.78rem;font-weight:600;font-variant-numeric:tabular-nums}
+.time{display:block;font-size:.62rem;font-weight:600;font-variant-numeric:tabular-nums}
 .a .time{color:var(--sky-ink)} .b .time{color:var(--lav-ink)}
 .time.tbd{font-weight:500;color:var(--mute)}
+/* 연속(기간) 일정 표시 */
+.range{display:inline-block;margin-bottom:.2rem;padding:.08rem .5rem;border-radius:99px;background:rgba(255,255,255,.75);
+  font-size:.62rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--mute)}
+.a .range{color:var(--sky-ink)} .b .range{color:var(--lav-ink)} .j .range{color:#5769a8}
+.time + .range{margin-left:.35rem}
 .title,.place{overflow-wrap:anywhere}
-.title{font-weight:500;font-size:.98rem;word-break:keep-all}
+.title{font-weight:500;font-size:.82rem;word-break:keep-all}
 .title a{
   background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;
   padding-bottom:1px;transition:background-size .15s,color .15s;
@@ -104,7 +109,7 @@ main{max-width:56rem;margin:0 auto;padding:var(--head-h,9rem) 1.25rem 6rem}
 .a .title a{text-decoration:underline;text-decoration-color:var(--sky);text-decoration-thickness:2px;text-underline-offset:3px;background:none}
 .b .title a{text-decoration:underline;text-decoration-color:var(--lav);text-decoration-thickness:2px;text-underline-offset:3px;background:none}
 .a .title a:hover{color:var(--sky-ink)} .b .title a:hover{color:var(--lav-ink)}
-.place{display:block;font-size:.82rem;color:var(--mute)}
+.place{display:block;font-size:.66rem;color:var(--mute)}
 
 .none{text-align:center;color:var(--mute);padding:4rem 0}
 
@@ -135,6 +140,12 @@ input[type=text],input[type=date],textarea{
 input:focus,textarea:focus{outline:none;background:var(--lav-soft);box-shadow:0 0 0 3px var(--lav)}
 textarea{min-height:9rem;resize:vertical}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.linkhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:.45rem}
+.linkhead label{margin:0!important}
+.paste{font-size:.82rem;font-weight:600;padding:.45rem 1rem;border-radius:99px;background:var(--lav-soft);color:var(--lav-ink);transition:background .15s}
+.paste:hover{background:var(--lav)}
+textarea.link{min-height:6.5rem;padding:1.1rem 1.15rem;font-size:1.05rem;line-height:1.55;word-break:break-all;resize:vertical}
+.hint{margin-top:.4rem;font-size:.78rem;color:var(--mute)}
 .send{
   width:100%;padding:1rem;border-radius:99px;font-weight:600;font-size:1rem;color:var(--ink);
   background:linear-gradient(90deg,var(--sky),var(--lav));transition:filter .15s,transform .1s;
