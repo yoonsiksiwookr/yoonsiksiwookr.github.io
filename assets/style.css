@@ -46,7 +46,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nav a[aria-current]{background:#fff;color:var(--ink)}
 .nav a:hover{color:var(--ink)}
 
-.cols,.day{
+.cols,#list{
   display:grid;grid-template-columns:var(--date-w) minmax(0,1fr) minmax(0,1fr);column-gap:.5rem;
 }
 .cols{padding-bottom:.9rem;font-weight:600;font-size:1rem}
@@ -57,49 +57,45 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ---------- 스케줄 목록 ---------- */
 main{max-width:56rem;margin:0 auto;padding:var(--head-h,9rem) 1.25rem 6rem}
-.day{margin-bottom:.35rem;scroll-margin-top:calc(var(--head-h,9rem) + .5rem)}
+.d{scroll-margin-top:calc(var(--head-h,9rem) + .5rem)}
 .d{
   grid-column:1;align-self:start;display:flex;align-items:baseline;gap:.35rem;
   padding:.9rem .4rem .9rem .9rem;
 }
 .d .n{font-size:1.7rem;font-weight:300;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
 .d .w{font-size:.78rem;color:var(--mute)}
-.day.sun .n,.day.sun .w{color:#d58fb0}
-.day.sat .n,.day.sat .w{color:var(--sky-ink)}
-.day.today .d{background:var(--ink);color:#fff;border-radius:1rem;align-self:start}
-.day.today .n,.day.today .w{color:#fff}
-.day.today .d{margin:.25rem 0}
+.d.sun .n,.d.sun .w{color:#d58fb0}
+.d.sat .n,.d.sat .w{color:var(--sky-ink)}
+.d.today{background:var(--ink);color:#fff;border-radius:1rem;align-self:start}
+.d.today .n,.d.today .w{color:#fff}
+.d.today{margin:.25rem 0}
 
 .cell{padding:.9rem .9rem}
 .cell.a{background:var(--sky-soft)}
 .cell.b{background:var(--lav-soft)}
 .cell.empty{padding:0;background:transparent}
 /* 두 배우 공동 일정: 두 열을 합쳐 가운데 정렬, 하늘색→라벤더 그라데이션 */
-.cell.j{grid-column:2 / span 2;text-align:center;background:linear-gradient(90deg,var(--sky-soft),var(--lav-soft))}
+.cell.j{text-align:center;background:linear-gradient(90deg,var(--sky-soft),var(--lav-soft))}
 .cell.j.gt{margin-top:.3rem}
 .cell.j.gb{margin-bottom:.3rem}
 .j .time{color:#5769a8}
 .j .title a{text-decoration:underline;text-decoration-color:#b9c4ee;text-decoration-thickness:2px;text-underline-offset:3px;background:none}
 .j .title a:hover{color:#5769a8}
-.day.blank .cell{min-height:0}
-.day.blank .d{padding-top:.55rem;padding-bottom:.55rem}
-.day.blank .d .n{font-size:1.2rem;color:#c3c1d6}
-.day.blank .d .w{color:#cfcde0}
-.day.blank .cell{background:transparent}
-.day .cell.first{border-radius:1rem 1rem 0 0}
-.day .cell.last{border-radius:0 0 1rem 1rem}
-.day .cell.first.last{border-radius:1rem}
-.cell:not(.empty) + .cell.empty{ }
+.d.blank{padding-top:.55rem;padding-bottom:.55rem}
+.d.blank .n{font-size:1.2rem;color:#c3c1d6}
+.d.blank .w{color:#cfcde0}
+.cell.first{border-radius:1rem 1rem 0 0}
+.cell.last{border-radius:0 0 1rem 1rem}
+.cell.first.last{border-radius:1rem}
 
 .entry + .entry{margin-top:.7rem}
 .time{display:block;font-size:.62rem;font-weight:600;font-variant-numeric:tabular-nums}
 .a .time{color:var(--sky-ink)} .b .time{color:var(--lav-ink)}
 .time.tbd{font-weight:500;color:var(--mute)}
 /* 연속(기간) 일정 표시 */
-.range{display:inline-block;margin-bottom:.2rem;padding:.08rem .5rem;border-radius:99px;background:rgba(255,255,255,.75);
+.range{display:block;width:fit-content;max-width:100%;margin-bottom:.3rem;padding:.08rem .5rem;border-radius:.6rem;line-height:1.35;background:rgba(255,255,255,.75);
   font-size:.62rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--mute)}
-.a .range{color:var(--sky-ink)} .b .range{color:var(--lav-ink)} .j .range{color:#5769a8}
-.time + .range{margin-left:.35rem}
+.a .range{color:var(--sky-ink)} .b .range{color:var(--lav-ink)} .j .range{color:#5769a8;margin-left:auto;margin-right:auto}
 .title,.place{overflow-wrap:anywhere}
 .title{font-weight:500;font-size:.82rem;word-break:keep-all}
 .title a{
@@ -163,7 +159,7 @@ textarea.link{min-height:6.5rem;padding:1.1rem 1.15rem;font-size:1.05rem;line-he
   .d .n{font-size:1.45rem}
   .cell{padding:.8rem .6rem}
   .cols span{padding:.15rem .6rem}
-  .cols{column-gap:.35rem}.day{column-gap:.35rem}
+  .cols,#list{column-gap:.35rem}
   .row{grid-template-columns:1fr}
 }
 /* 모바일 헤더: 월 표시와 메뉴가 한 줄에 들어가도록 크기 조절 */
@@ -185,3 +181,16 @@ textarea.link{min-height:6.5rem;padding:1.1rem 1.15rem;font-size:1.05rem;line-he
   .cols{font-size:.85rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---------- 연속(기간) 일정: 여러 날을 하나로 합친 덩어리 ---------- */
+.cell.rng{align-self:stretch}
+.cell.rng.a{box-shadow:inset 3px 0 0 var(--sky)}
+.cell.rng.b{box-shadow:inset 3px 0 0 var(--lav)}
+@media (max-width:520px){
+  .cell.rng{padding:.6rem .35rem}
+  .rng .title{font-size:.72rem}
+  .rng .place{font-size:.6rem}
+  .rng .range{padding:.05rem .3rem;font-size:.58rem}
+  .cols span{padding-left:.3rem;padding-right:.3rem;white-space:nowrap}
+}
+.rng .title,.rng .place{overflow-wrap:break-word}
