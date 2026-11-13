@@ -4,46 +4,52 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>김윤식 · 박시우 스케줄</title>
-<meta name="description" content="김윤식, 박시우 배우의 월별 스케줄">
-<link rel="stylesheet" href="assets/style.css?v=5">
+<meta name="description" content="김윤식, 박시우 배우의 월별 스케줄 캘린더">
+<link rel="stylesheet" href="assets/style.css?v=7">
 </head>
 <body>
-<header class="head" id="head">
-  <div class="head-in">
-    <div class="bar">
-      <div class="month">
-        <button class="step" id="prev" aria-label="이전 달">‹</button>
-        <h1 id="title" aria-live="polite"></h1>
-        <button class="step" id="next" aria-label="다음 달">›</button>
-      </div>
-      <nav class="nav" aria-label="페이지">
-        <a href="index.html" aria-current="page">스케줄</a>
-        <a href="report.html">일정추가</a>
-      </nav>
-    </div>
-    <div class="cols" aria-hidden="true">
-      <span class="c-date">날짜</span>
-      <span class="c-a">🩵 김윤식 배우</span>
-      <span class="c-b">💜 박시우 배우</span>
-    </div>
-  </div>
+<header class="head">
+  <div class="head-in"><div class="bar">
+    <a class="brand" href="index.html"><i class="dot a"></i><i class="dot b"></i>김윤식 · 박시우</a>
+    <nav class="nav" aria-label="페이지">
+      <a href="index.html" aria-current="page">스케줄</a>
+      <a href="report.html">일정추가</a>
+    </nav>
+  </div></div>
 </header>
 
-<main id="list"></main>
+<main class="wrap">
+  <section class="card cal" aria-label="캘린더">
+    <div class="cal-h">
+      <button class="step" id="prev" aria-label="이전 달">‹</button>
+      <h1 id="title" aria-live="polite"></h1>
+      <button class="step" id="next" aria-label="다음 달">›</button>
+      <button class="tbtn" id="today">오늘</button>
+    </div>
+    <div class="chips" role="group" aria-label="배우 선택">
+      <button class="chip" data-who="all" aria-pressed="true">전체</button>
+      <button class="chip a" data-who="yoonsik" aria-pressed="false">🩵 김윤식</button>
+      <button class="chip b" data-who="siwoo" aria-pressed="false">💜 박시우</button>
+    </div>
+    <div class="dow" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+    <div class="grid" id="grid"></div>
+  </section>
+  <section class="sched" id="list" aria-label="일정 목록"></section>
+</main>
 
 <script src="assets/data.js"></script>
 <script>
 (function(){
-  var WEEK = ['일','월','화','수','목','금','토'];
+  var WEEK = ['일','월','화','수','목','금','토'], NAME = {yoonsik:'김윤식', siwoo:'박시우', j:'함께'};
   var $ = function(id){return document.getElementById(id)};
-  var head = $('head'), list = $('list');
   var pad = function(n){return String(n).padStart(2,'0')};
   var now = new Date();
   var todayStr = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
   var cur = (location.hash.match(/^#(\d{4})-(\d{2})$/) ? location.hash.slice(1) : todayStr.slice(0,7));
+  var who = 'all', sel = 0;
   var remote = [], loaded = false, failed = false, CK = 'schedule-cache-v1';
 
-  /* "14시", "저녁 7시", "19:30" → "HH:MM" (못 읽으면 "") */
+  /* ---------- 데이터 ---------- */
   function parseTime(raw){
     raw = String(raw||'').trim(); if(!raw) return '';
     var h, min = 0, m = raw.match(/(\d{1,2})\s*:\s*(\d{2})/);
@@ -58,57 +64,48 @@
     if(h > 23 || min > 59) return '';
     return pad(h)+':'+pad(min);
   }
-  /* 제보 데이터 → 화면용 일정 (두 배우 모두 → 두 개) */
   function fromRemote(r){
-    var t = parseTime(r.time);
-    var en = String(r.end||r.endDate||'').trim();
+    var t = parseTime(r.time), en = String(r.end||r.endDate||'').trim();
     var base = {date:r.date, end:en, time:t, timeText: t ? '' : String(r.time||''), title:r.title, place:String(r.place||''), link:r.link};
     var who = r.actor === 'both' ? ['yoonsik','siwoo'] : [r.actor];
     return who.filter(function(a){return a==='yoonsik'||a==='siwoo'}).map(function(a){
       var o = Object.assign({}, base); o.actor = a; return o;
     });
   }
-  /* 2026-12-6, 2026.12.6 → 2026-12-06 */
-  function norm(v){
+  function norm(v){   /* 2026-12-6, 2026.12.6 → 2026-12-06 */
     var s = String(v||'').trim(), m = s.match(/^(\d{4})[-./]\s*(\d{1,2})[-./]\s*(\d{1,2})/);
     return m ? m[1]+'-'+pad(+m[2])+'-'+pad(+m[3]) : s;
   }
   function ymd(dt){ return dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate()); }
   function md(d){ return (+d.slice(5,7))+'/'+(+d.slice(8,10)); }
-  /* 종료일(end)이 있는 연속 일정 → 기간의 매일 하루씩 펼친다 */
-  function expand(s){
+  function expand(s){   /* 종료일이 있으면 기간의 매일로 펼친다 */
     var st = norm(s.date), en = norm(s.end), re = /^\d{4}-\d{2}-\d{2}$/;
-    if(!re.test(st) || !re.test(en) || en <= st) return [s];
+    if(!re.test(st) || !re.test(en) || en <= st) return [Object.assign({}, s, {date:st})];
     var a = [+st.slice(0,4), +st.slice(5,7)-1, +st.slice(8,10)];
-    var total = Math.round((new Date(+en.slice(0,4), +en.slice(5,7)-1, +en.slice(8,10)) - new Date(a[0],a[1],a[2])) / 864e5) + 1;
-    var out = [];
+    var total = Math.round((new Date(+en.slice(0,4), +en.slice(5,7)-1, +en.slice(8,10)) - new Date(a[0],a[1],a[2])) / 864e5) + 1, out = [];
     for(var i = 0; i < Math.min(total, 92); i++){
       var o = Object.assign({}, s);
-      o.date = ymd(new Date(a[0], a[1], a[2]+i));
-      o.rangeStart = st; o.rangeEnd = en; o.dayNo = i+1; o.dayTotal = total;
+      o.date = ymd(new Date(a[0], a[1], a[2]+i)); o.rangeStart = st; o.rangeEnd = en;
       out.push(o);
     }
     return out;
   }
   function allData(){
     var seen = {}, out = [];
-    var all = (window.SCHEDULE || []).concat(remote);
-    [].concat.apply([], all.map(expand)).forEach(function(s){
+    [].concat.apply([], (window.SCHEDULE || []).concat(remote).map(expand)).forEach(function(s){
       var k = [s.date,s.actor,s.time,s.title].join('|');
       if(seen[k]) return; seen[k] = 1; out.push(s);
     });
     return out;
   }
-
-  function shift(ym, d){
-    var y = +ym.slice(0,4), m = +ym.slice(5,7) - 1 + d, dt = new Date(y, m, 1);
-    return dt.getFullYear()+'-'+pad(dt.getMonth()+1);
-  }
   function byTime(a,b){
     if(!a.time && !b.time) return 0;
-    if(!a.time) return 1;
-    if(!b.time) return -1;
+    if(!a.time) return 1; if(!b.time) return -1;
     return a.time < b.time ? -1 : a.time > b.time ? 1 : 0;
+  }
+  function shift(ym, d){
+    var dt = new Date(+ym.slice(0,4), +ym.slice(5,7) - 1 + d, 1);
+    return dt.getFullYear()+'-'+pad(dt.getMonth()+1);
   }
   function el(tag, cls, text){
     var e = document.createElement(tag);
@@ -116,226 +113,140 @@
     if(text != null) e.textContent = text;
     return e;
   }
-  function item(s, hideTime){
-    var f = el('div', 'entry');
-    if(!hideTime && (s.time || s.timeText || !s.rangeEnd)) f.appendChild(el('span', 'time' + (s.time ? '' : ' tbd'), s.time || s.timeText || '시간 미정'));
-    if(s.rangeEnd) f.appendChild(el('span', 'range', md(s.rangeStart) + '~\u200b' + md(s.rangeEnd)));
-    var t = el('span', 'title');
-    if(/^https?:\/\//i.test(s.link || '')){
-      var a = el('a', null, s.title);
-      a.href = s.link; a.target = '_blank'; a.rel = 'noopener noreferrer';
+
+  /* ---------- 일정 카드 ---------- */
+  function card(e){
+    var c = el('div', 'ev ' + (e.actor === 'j' ? 'j' : e.actor === 'yoonsik' ? 'a' : 'b'));
+    var meta = el('div', 'meta');
+    meta.appendChild(el('span', 'tag', NAME[e.actor]));
+    if(e.time || e.timeText || !e.rangeEnd) meta.appendChild(el('span', 'time' + (e.time ? '' : ' tbd'), e.time || e.timeText || '시간 미정'));
+    if(e.rangeEnd) meta.appendChild(el('span', 'range', md(e.rangeStart) + ' ~ ' + md(e.rangeEnd)));
+    if(e.isStart) meta.appendChild(el('span', 'flag s', '시작'));
+    if(e.isEnd) meta.appendChild(el('span', 'flag', '마지막 날'));
+    c.appendChild(meta);
+    var t = el('div', 'title');
+    if(/^https?:\/\//i.test(e.link || '')){
+      var a = el('a', null, e.title);
+      a.href = e.link; a.target = '_blank'; a.rel = 'noopener noreferrer';
       t.appendChild(a);
-    } else { t.textContent = s.title; }
-    f.appendChild(t);
-    if(s.place) f.appendChild(el('span', 'place', s.place));
-    return f;
+    } else t.textContent = e.title;
+    c.appendChild(t);
+    if(e.place) c.appendChild(el('div', 'place', e.place));
+    return c;
   }
 
+  /* ---------- 화면 ---------- */
   function render(){
-    var y = +cur.slice(0,4), m = +cur.slice(5,7);
+    var y = +cur.slice(0,4), m = +cur.slice(5,7), days = new Date(y, m, 0).getDate();
     $('title').innerHTML = y + '. <b>' + pad(m) + '</b>';
     document.title = y + '년 ' + m + '월 · 김윤식 박시우 스케줄';
-    list.innerHTML = '';
-    var days = new Date(y, m, 0).getDate();
-    var data = allData().filter(function(s){return String(s.date).slice(0,7) === cur});
-    var normal = data.filter(function(s){return !s.rangeEnd});
+    var data = allData().filter(function(s){
+      return String(s.date).slice(0,7) === cur && (who === 'all' || s.actor === who);
+    }).sort(function(p,q){ return p.date < q.date ? -1 : p.date > q.date ? 1 : 0; });
 
-    /* ① 연속(기간) 일정: 여러 날을 하나의 덩어리로 합친다 */
-    var evs = {}, evList = [];
-    data.filter(function(s){return s.rangeEnd}).forEach(function(s){
-      var k = [s.actor,s.rangeStart,s.rangeEnd,s.title,s.time].join('|'), d = +String(s.date).slice(8,10);
-      var e = evs[k];
-      if(!e){ e = evs[k] = {s:s, v1:d, v2:d}; evList.push(e); }
-      if(d < e.v1) e.v1 = d;
-      if(d > e.v2) e.v2 = d;
+    /* 캘린더 */
+    var mark = {};
+    data.forEach(function(s){
+      var d = +s.date.slice(8,10), f = mark[d] || (mark[d] = {});
+      f[s.actor] = s.rangeEnd ? 'r' : (f[s.actor] || 'x');
     });
-    /* 같은 배우의 기간 일정이 겹치면 옆 칸(lane)으로 나란히 */
-    var nLane = {yoonsik:0, siwoo:0};
-    Object.keys(nLane).forEach(function(a){
-      var ends = [];
-      evList.filter(function(e){return e.s.actor === a}).sort(function(p,q){
-        return p.v1 - q.v1 || q.v2 - p.v2 || String(p.s.title).localeCompare(String(q.s.title));
-      }).forEach(function(e){
-        var i = 0; while(i < ends.length && ends[i] >= e.v1) i++;
-        ends[i] = e.v2; e.lane = i;
-      });
-      nLane[a] = ends.length;
-    });
-
-    /* ② 열 구성: 날짜 | (김윤식 lane…, 본문) | (박시우 lane…, 본문) */
-    var nA = nLane.yoonsik, nB = nLane.siwoo;
-    var base = {yoonsik:2, siwoo:3 + nA};
-    var endc = {yoonsik:3 + nA, siwoo:4 + nA + nB};
-    function tracks(n){   /* lane은 1fr씩, 본문은 두 배우 폭이 크게 어긋나지 않게 */
-      var t = [], i;
-      for(i = 0; i < n; i++) t.push('minmax(0,1.2fr)');
-      t.push('minmax(0,' + Math.max(1, 2 - n) + 'fr)');
-      return t;
-    }
-    var tpl = ['var(--date-w)'].concat(tracks(nA), tracks(nB)).join(' ');
-    list.style.gridTemplateColumns = tpl;
-    var cols = head.querySelector('.cols');
-    cols.style.gridTemplateColumns = tpl;
-    cols.querySelector('.c-date').style.gridColumn = '1';
-    cols.querySelector('.c-a').style.gridColumn = '2 / span ' + (nA + 1);
-    cols.querySelector('.c-b').style.gridColumn = (3 + nA) + ' / span ' + (nB + 1);
-
-    /* ③ 날짜별 행 */
-    var rows = [], r = 1, dayRows = {};
-    if(!data.length){
-      var msg = loaded ? '이 달에 등록된 스케줄이 없어요.'
-              : failed ? '일정을 불러오지 못했어요. 잠시 후 새로고침해 주세요.'
-              : '일정을 불러오는 중…';
-      var np = el('p', 'none', msg);
-      np.style.gridRow = '1'; np.style.gridColumn = '1 / -1';
-      list.appendChild(np); rows.push('auto'); r = 2;
-    }
-
+    var grid = $('grid'); grid.innerHTML = '';
+    for(var i = 0, first = new Date(y, m-1, 1).getDay(); i < first; i++) grid.appendChild(el('span'));
     for(var d = 1; d <= days; d++){
-      var ds = cur + '-' + pad(d);
-      var wd = new Date(y, m-1, d).getDay();
-      var items = normal.filter(function(s){return s.date === ds});
-      var act = evList.filter(function(e){return e.v1 <= d && d <= e.v2});
-      var anyR = act.length > 0;
-      /* 같은 시간은 같은 행에 놓는다 (시간 없는 일정은 마지막 행) */
-      var keys = [];
-      items.slice().sort(byTime).forEach(function(s){
-        var k = s.time || ''; if(keys.indexOf(k) < 0) keys.push(k);
-      });
-      /* 행 만들기: 두 배우의 같은 시간·같은 제목 일정은 하나(공동)로 합친다 (기간 일정이 있는 날은 제외) */
-      var rowsDef = [];
-      keys.forEach(function(k){
-        var A = items.filter(function(s){return s.actor==='yoonsik' && (s.time||'')===k});
-        var B = items.filter(function(s){return s.actor==='siwoo' && (s.time||'')===k});
-        var joint = [];
-        if(!anyR){
-          A = A.filter(function(a){
-            var i = B.findIndex(function(b){return String(b.title).trim() === String(a.title).trim()});
-            if(i < 0) return true;
-            var b = B.splice(i, 1)[0];
-            joint.push({date:a.date, time:a.time, timeText:a.timeText||b.timeText, title:a.title,
-                        place:a.place||b.place, link:a.link||b.link});
-            return false;
-          });
-        }
-        if(joint.length) rowsDef.push({j:joint});
-        if(A.length || B.length) rowsDef.push({a:A, b:B});
-      });
-      var n = Math.max(rowsDef.length, 1);
-      var r0 = r; dayRows[d] = [r0, r0 + n - 1];
-      for(var q = 0; q < n; q++) rows.push('auto');
-      rows.push('.35rem');            /* 날짜 사이 간격 */
-      r += n + 1;
-
-      var date = el('div', 'd' + (wd===0?' sun':'') + (wd===6?' sat':'') +
-                  (ds===todayStr?' today':'') + (!items.length && !anyR ? ' blank' : ''));
-      date.id = 'd' + d;
-      date.style.gridRow = r0 + ' / span ' + n;
-      date.style.gridColumn = '1';
-      date.appendChild(el('span', 'n', d));
-      date.appendChild(el('span', 'w', WEEK[wd]));
-      list.appendChild(date);
-
-      /* 기간 일정이 차지한 칸은 피해서 본문 칸에만 놓는다 */
-      var st = {};
-      ['yoonsik','siwoo'].forEach(function(a){
-        var mx = -1;
-        act.forEach(function(e){ if(e.s.actor === a && e.lane > mx) mx = e.lane; });
-        st[a] = base[a] + mx + 1;
-      });
-
-      rowsDef.forEach(function(rd, ri){
-        if(rd.j){
-          var prevJ = ri > 0 && rowsDef[ri-1].j, nextJ = ri < n-1 && rowsDef[ri+1].j;
-          var jc = el('div', 'cell j' + (prevJ?'':' first') + (nextJ?'':' last') +
-                      (ri > 0 && !prevJ ? ' gt' : '') + (ri < n-1 && !nextJ ? ' gb' : ''));
-          jc.style.gridRow = String(r0 + ri);
-          jc.style.gridColumn = '2 / ' + endc.siwoo;
-          rd.j.forEach(function(s, i){ jc.appendChild(item(s, i > 0 && (s.time||'') !== '')); });
-          list.appendChild(jc);
-          return;
-        }
-        [['a','yoonsik'],['b','siwoo']].forEach(function(p){
-          var its = rd[p[0]];
-          if(!its.length) return;
-          var prevF = ri > 0 && !rowsDef[ri-1].j && rowsDef[ri-1][p[0]].length;
-          var nextF = ri < n-1 && !rowsDef[ri+1].j && rowsDef[ri+1][p[0]].length;
-          var c = el('div', 'cell ' + p[0] + (prevF?'':' first') + (nextF?'':' last'));
-          c.style.gridRow = String(r0 + ri);
-          c.style.gridColumn = st[p[1]] + ' / ' + endc[p[1]];
-          its.forEach(function(s, i){ c.appendChild(item(s, i > 0 && (s.time||'') !== '')); });
-          list.appendChild(c);
-        });
-      });
+      var wd = new Date(y, m-1, d).getDay(), ds = cur + '-' + pad(d);
+      var b = el('button', 'c' + (wd===0?' sun':'') + (wd===6?' sat':'') + (ds===todayStr?' today':'') + (d===sel?' sel':''));
+      b.type = 'button'; b.setAttribute('aria-label', m + '월 ' + d + '일');
+      b.appendChild(el('span', null, d));
+      var dots = el('div', 'dots'), f = mark[d] || {};
+      if(f.yoonsik) dots.appendChild(el('i', 'a' + (f.yoonsik==='r'?' r':'')));
+      if(f.siwoo) dots.appendChild(el('i', 'b' + (f.siwoo==='r'?' r':'')));
+      b.appendChild(dots);
+      b.onclick = (function(dd){ return function(){ sel = dd; render(); scrollToDay(dd); }; })(d);
+      grid.appendChild(b);
     }
 
-    /* ④ 기간 일정 덩어리: 시작일 행부터 종료일 행까지 하나로 합쳐서 */
-    evList.forEach(function(e){
-      var a = e.s.actor, col = base[a] + e.lane;
-      var c = el('div', 'cell ' + (a === 'yoonsik' ? 'a' : 'b') + ' rng first last');
-      c.style.gridRow = dayRows[e.v1][0] + ' / ' + (dayRows[e.v2][1] + 1);
-      c.style.gridColumn = col + ' / ' + (col + 1);
-      c.appendChild(item(e.s, false));
-      list.appendChild(c);
+    /* 목록: 기간 일정은 시작일(이번 달 첫날)에 한 번만, 두 배우 같은 일정은 '함께'로 합침 */
+    var seenR = {}, merged = {}, entries = [];
+    data.forEach(function(s){
+      var isS = false, isE = false;
+      if(s.rangeEnd){
+        var rk = [s.actor,s.rangeStart,s.rangeEnd,s.title,s.time].join('|');
+        isS = s.date === s.rangeStart; isE = s.date === s.rangeEnd;
+        if(seenR[rk]){ if(!isE) return; } else seenR[rk] = 1;   /* 시작일과 종료일에 한 번씩 */
+      }
+      var k = [s.date,s.time,s.title,s.rangeStart||'',s.rangeEnd||''].join('|'), o = merged[k];
+      if(o && o.actor !== s.actor){ o.actor = 'j'; o.place = o.place || s.place; o.link = o.link || s.link; return; }
+      if(o) return;
+      o = merged[k] = Object.assign({}, s, {isStart:isS, isEnd:isE}); entries.push(o);
     });
-    list.style.gridTemplateRows = rows.join(' ');
-  }
+    var byDay = {};
+    entries.forEach(function(e){ (byDay[+e.date.slice(8,10)] = byDay[+e.date.slice(8,10)] || []).push(e); });
 
-  function setHeadH(){
-    document.documentElement.style.setProperty('--head-h', head.offsetHeight + 'px');
+    var list = $('list'); list.innerHTML = '';
+    Object.keys(byDay).map(Number).sort(function(p,q){return p-q}).forEach(function(d){
+      var wd = new Date(y, m-1, d).getDay();
+      var g = el('article', 'day' + (wd===0?' sun':'') + (wd===6?' sat':'') + (cur+'-'+pad(d)===todayStr?' today':''));
+      g.id = 'g' + d;
+      var h = el('h2', 'dh'); h.appendChild(el('span', 'n', d)); h.appendChild(el('span', 'w', WEEK[wd]));
+      g.appendChild(h);
+      var evs = el('div', 'evs');
+      byDay[d].sort(byTime).forEach(function(e){ evs.appendChild(card(e)); });
+      g.appendChild(evs); list.appendChild(g);
+    });
+    if(!entries.length){
+      list.appendChild(el('p', 'none', loaded ? (who === 'all' ? '이 달에 등록된 스케줄이 없어요.' : '이 달에 등록된 ' + NAME[who] + ' 배우의 스케줄이 없어요.')
+        : failed ? '일정을 불러오지 못했어요. 잠시 후 새로고침해 주세요.' : '일정을 불러오는 중…'));
+    }
   }
-  function go(ym){
-    cur = ym; history.replaceState(null, '', '#' + ym);
-    render(); setHeadH(); window.scrollTo(0,0);
+  function scrollToDay(d){
+    var gs = document.querySelectorAll('.day'), t = null;
+    for(var i = 0; i < gs.length; i++){ if(+gs[i].id.slice(1) >= d){ t = gs[i]; break; } }
+    if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  function go(ym, d){
+    cur = ym; sel = d || 0; history.replaceState(null, '', '#' + ym);
+    render(); if(!d) window.scrollTo(0,0);
   }
 
   $('prev').onclick = function(){ go(shift(cur,-1)) };
   $('next').onclick = function(){ go(shift(cur, 1)) };
-  window.addEventListener('resize', setHeadH);
+  $('today').onclick = function(){ go(todayStr.slice(0,7), +todayStr.slice(8,10)); scrollToDay(+todayStr.slice(8,10)); };
+  Array.prototype.forEach.call(document.querySelectorAll('.chip'), function(b){
+    b.onclick = function(){
+      who = b.getAttribute('data-who');
+      Array.prototype.forEach.call(document.querySelectorAll('.chip'), function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      render();
+    };
+  });
   window.addEventListener('hashchange', function(){
     var h = location.hash.slice(1);
     if(/^\d{4}-\d{2}$/.test(h) && h !== cur) go(h);
   });
 
-  function setRemote(items){
-    remote = [].concat.apply([], items.map(fromRemote));
-    loaded = true;
-  }
-  function rerender(){
-    var y0 = window.scrollY; render(); window.scrollTo(0, y0);
-  }
+  /* ---------- 불러오기: 저장해 둔 일정 → schedule.json → Google 시트(최신) ---------- */
+  function setRemote(items){ remote = [].concat.apply([], items.map(fromRemote)); loaded = true; }
+  function rerender(){ var y0 = window.scrollY; render(); window.scrollTo(0, y0); }
 
   var api = (window.SITE || {}).api || '';
-  var hasApi = api && !/YOUR_/.test(api);
-  var cached = false, apiDone = false;
-
-  /* 1) 지난 방문 때 저장해 둔 일정을 먼저 보여준다 */
+  var hasApi = api && !/YOUR_/.test(api), cached = false, apiDone = false;
   try {
     var c = JSON.parse(localStorage.getItem(CK) || 'null');
     if(c && c.items){ setRemote(c.items); cached = true; }
   } catch(e){}
   if(!hasApi) loaded = true;
-
-  render(); setHeadH();
-  var t = document.querySelector('.d.today'); if(t) t.scrollIntoView({block:'start'});
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(setHeadH);
+  render();
 
   if(hasApi){
-    /* 2) 사이트에 저장된 schedule.json (빠름) — 저장된 일정이 없을 때만 사용 */
     fetch('schedule.json?t=' + Math.floor(Date.now()/60000))
       .then(function(r){ if(!r.ok) throw 0; return r.json() })
       .then(function(j){ if(apiDone || cached) return; setRemote(j.items || []); rerender(); })
       .catch(function(){});
-
-    /* 3) Google 시트의 최신 내용 — 도착하면 항상 이것으로 맞춘다 */
     fetch(api).then(function(r){ return r.json() }).then(function(j){
       apiDone = true;
       var items = j.items || [];
       try { localStorage.setItem(CK, JSON.stringify({items: items})); } catch(e){}
       setRemote(items); rerender();
-    }).catch(function(){
-      if(!loaded){ failed = true; rerender(); }
-    });
+    }).catch(function(){ if(!loaded){ failed = true; rerender(); } });
   }
 })();
 </script>
